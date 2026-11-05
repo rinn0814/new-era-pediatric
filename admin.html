@@ -10,26 +10,22 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #f7f8fc; color: #1e293b; min-height: 100vh; }
 
-    /* NAVBAR */
     .navbar { background: linear-gradient(135deg, #1a3a5c, #1b5fae); padding: 0 24px; box-shadow: 0 3px 16px rgba(26,58,92,.35); position: sticky; top: 0; z-index: 100; }
     .navbar-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 70px; }
     .brand { display: flex; align-items: center; gap: 12px; color: #fff; }
     .brand-icon { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
     .brand-name { font-size: 1.15rem; font-weight: 800; letter-spacing: .5px; }
     .brand-sub { font-size: .68rem; color: rgba(255,255,255,.65); text-transform: uppercase; letter-spacing: 1px; }
-    .nav-link { background: rgba(255,255,255,.12); color: rgba(255,255,255,.9); padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: .85rem; font-weight: 500; border: 1px solid rgba(255,255,255,.18); transition: .25s; }
+    .nav-link { background: rgba(255,255,255,.12); color: rgba(255,255,255,.9); padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: .85rem; font-weight: 500; border: 1px solid rgba(255,255,255,.18); transition: .25s; display: inline-flex; align-items: center; gap: 6px; }
     .nav-link:hover { background: rgba(255,255,255,.22); color: #fff; }
 
-    /* CONTAINER */
     .container { max-width: 1100px; margin: 0 auto; padding: 30px 24px 60px; }
 
-    /* SECTION */
     .section { background: #fff; border-radius: 14px; padding: 28px; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.07); border: 1px solid #eef0f6; }
     .section-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 2px solid #e3edfa; }
     .section-header h2 { font-size: 1.3rem; font-weight: 700; color: #1a3a5c; display: flex; align-items: center; gap: 10px; }
     .section-header h2 i { color: #2e86de; }
 
-    /* BUTTONS */
     .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border: none; border-radius: 8px; font-family: inherit; font-size: .88rem; font-weight: 600; cursor: pointer; transition: .25s; text-decoration: none; }
     .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.1); }
     .btn-primary { background: #2e86de; color: #fff; }
@@ -39,7 +35,6 @@
     .btn-outline:hover { background: #2e86de; color: #fff; }
     .btn-sm { padding: 6px 14px; font-size: .78rem; border-radius: 6px; }
 
-    /* PATIENT LIST */
     .patient-card { display: flex; align-items: center; justify-content: space-between; background: #f7f8fc; border: 1px solid #eef0f6; border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; transition: .25s; flex-wrap: wrap; gap: 12px; }
     .patient-card:hover { background: #e3edfa; border-color: #2e86de; }
     .patient-info { display: flex; align-items: center; gap: 14px; min-width: 0; }
@@ -48,7 +43,6 @@
     .patient-id { font-size: .78rem; color: #8e99aa; }
     .patient-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    /* FORM */
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .form-group { margin-bottom: 0; }
     .form-group.full { grid-column: 1 / -1; margin-bottom: 16px; }
@@ -59,42 +53,36 @@
     .form-group.has-error input, .form-group.has-error select { border-color: #ef4444; }
     .form-group.has-error .err { display: block; }
 
-    /* MODAL */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 500; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
     .modal-overlay.active { display: flex; }
     .modal { background: #fff; border-radius: 14px; width: 100%; max-width: 620px; max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,.16); animation: slideUp .3s ease; }
-    .modal-wide { max-width: 800px; }
-    .modal-small { max-width: 420px; }
+    .modal-small { max-width: 440px; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 26px; border-bottom: 1px solid #eef0f6; background: #f7f8fc; border-radius: 14px 14px 0 0; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 26px; border-bottom: 1px solid #eef0f6; background: #f7f8fc; border-radius: 14px 14px 0 0; flex-shrink: 0; }
     .modal-header h3 { font-size: 1.12rem; font-weight: 700; color: #1a3a5c; display: flex; align-items: center; gap: 10px; }
     .modal-header h3 i { color: #2e86de; }
     .modal-close { width: 38px; height: 38px; border: none; background: #dde1ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #4b5563; transition: .25s; }
     .modal-close:hover { background: #ef4444; color: #fff; transform: rotate(90deg); }
     .modal-body { padding: 24px 26px; overflow-y: auto; flex: 1; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 18px 26px; border-top: 1px solid #eef0f6; background: #f7f8fc; border-radius: 0 0 14px 14px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 18px 26px; border-top: 1px solid #eef0f6; background: #f7f8fc; border-radius: 0 0 14px 14px; flex-shrink: 0; }
 
-    /* QR */
     .qr-area { text-align: center; padding: 20px 0; }
     .qr-area img { border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.1); margin-bottom: 14px; }
-    .qr-url { background: #f7f8fc; padding: 10px 16px; border-radius: 8px; font-size: .82rem; color: #1b5fae; word-break: break-all; margin-bottom: 16px; text-align: left; }
+    .qr-url { background: #f7f8fc; padding: 10px 16px; border-radius: 8px; font-size: .82rem; color: #1b5fae; word-break: break-all; margin-bottom: 16px; text-align: left; line-height: 1.6; }
+    .qr-loading { text-align: center; padding: 30px; color: #8e99aa; font-size: .95rem; }
 
-    /* TOAST */
     .toast { position: fixed; bottom: 32px; right: 32px; padding: 14px 28px; border-radius: 8px; color: #fff; font-weight: 600; font-size: .92rem; z-index: 9000; box-shadow: 0 10px 40px rgba(0,0,0,.16); opacity: 0; transform: translateY(20px); transition: .4s; pointer-events: none; display: flex; align-items: center; gap: 10px; max-width: 400px; }
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast.success { background: #22c55e; }
     .toast.error { background: #ef4444; }
     .toast.info { background: #2e86de; }
 
-    /* EMPTY */
     .empty-msg { text-align: center; padding: 40px; color: #8e99aa; }
     .empty-msg i { font-size: 3rem; margin-bottom: 12px; opacity: .45; }
     .empty-msg p { font-size: 1.05rem; font-weight: 500; }
 
-    /* FOOTER */
     .footer { text-align: center; padding: 24px; color: #8e99aa; font-size: .82rem; border-top: 1px solid #eef0f6; background: #fff; }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       .navbar-inner { flex-direction: column; height: auto; padding: 14px 0; gap: 10px; }
       .form-row { grid-template-columns: 1fr; gap: 0; }
@@ -130,7 +118,7 @@
         <button class="btn btn-success" id="addPatientBtn"><i class="fas fa-plus-circle"></i> Add New Patient</button>
       </div>
       <div id="patientList"></div>
-      <div class="empty-msg" id="emptyPatients">
+      <div class="empty-msg" id="emptyPatients" style="display:none;">
         <i class="fas fa-user-slash"></i>
         <p>No patients found. Click "Add New Patient" to get started.</p>
       </div>
@@ -150,17 +138,15 @@
     <div class="modal">
       <div class="modal-header">
         <h3><i class="fas fa-user-plus"></i> Add New Patient</h3>
-        <button class="modal-close" onclick="closeModal('addPatientModal')"><i class="fas fa-times"></i></button>
+        <button class="modal-close" data-close="addPatientModal"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
         <form id="addPatientForm" autocomplete="off">
           <div class="form-group full">
             <label>Patient ID / Code *</label>
             <input type="text" id="newPatientId" placeholder="e.g. patient-john-002" />
-            <div class="err" id="errId">Patient ID is required.</div>
-            <div style="font-size:.75rem;color:#8e99aa;margin-top:4px;">
-              This ID goes in the URL and QR code. Use letters, numbers, and dashes only.
-            </div>
+            <div class="err" id="errId"></div>
+            <div style="font-size:.75rem;color:#8e99aa;margin-top:4px;">This ID goes in the URL and QR code. Use letters, numbers, and dashes only.</div>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -211,7 +197,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" onclick="closeModal('addPatientModal')"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn btn-danger" data-close="addPatientModal"><i class="fas fa-times"></i> Cancel</button>
         <button class="btn btn-success" id="saveNewPatientBtn"><i class="fas fa-save"></i> Save Patient</button>
       </div>
     </div>
@@ -222,17 +208,18 @@
     <div class="modal modal-small">
       <div class="modal-header">
         <h3><i class="fas fa-qrcode"></i> Patient QR Code</h3>
-        <button class="modal-close" onclick="closeModal('qrModal')"><i class="fas fa-times"></i></button>
+        <button class="modal-close" data-close="qrModal"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
         <div class="qr-area">
-          <img id="qrImage" src="" alt="QR Code" />
+          <div id="qrLoading" class="qr-loading"><i class="fas fa-spinner fa-spin"></i> Generating QR code...</div>
+          <img id="qrImage" src="" alt="QR Code" style="display:none;" />
           <div class="qr-url" id="qrUrlText"></div>
-          <button class="btn btn-success" onclick="downloadQR()"><i class="fas fa-download"></i> Download QR Code</button>
+          <button class="btn btn-success" id="downloadQRBtn" style="display:none;"><i class="fas fa-download"></i> Download QR Code</button>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" onclick="closeModal('qrModal')"><i class="fas fa-times"></i> Close</button>
+        <button class="btn btn-primary" data-close="qrModal"><i class="fas fa-times"></i> Close</button>
       </div>
     </div>
   </div>
@@ -242,28 +229,29 @@
     <div class="modal modal-small">
       <div class="modal-header">
         <h3 style="color:#ef4444;"><i class="fas fa-exclamation-triangle"></i> Delete Patient</h3>
-        <button class="modal-close" onclick="closeModal('deletePatientModal')"><i class="fas fa-times"></i></button>
+        <button class="modal-close" data-close="deletePatientModal"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
         <p id="deletePatientMsg" style="font-size:1.02rem;color:#4b5563;line-height:1.7;">Are you sure?</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" onclick="closeModal('deletePatientModal')"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn btn-danger" data-close="deletePatientModal"><i class="fas fa-times"></i> Cancel</button>
         <button class="btn btn-danger" id="confirmDeletePatientBtn"><i class="fas fa-trash"></i> Delete Permanently</button>
       </div>
     </div>
   </div>
 
-  <!-- QR Library -->
+  <!-- Load QR Library FIRST -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-
   <script>
-    // ============================================================
-    //  ADMIN – Patient Management & QR Generator
-    // ============================================================
+  (function () {
+    'use strict';
 
-    // DOM Helpers
+    // ================================================
+    //  DOM HELPERS
+    // ================================================
     function $(id) { return document.getElementById(id); }
+    function $qa(sel) { return document.querySelectorAll(sel); }
 
     function esc(str) {
       if (!str) return '';
@@ -272,11 +260,9 @@
       return d.innerHTML;
     }
 
-    function genId() {
-      return 'id_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
-    }
-
-    // Toast
+    // ================================================
+    //  TOAST
+    // ================================================
     var toastTimer = null;
     function toast(msg, type) {
       type = type || 'success';
@@ -285,7 +271,9 @@
       el.className = 'toast ' + type;
       var icon = el.querySelector('i');
       if (icon) {
-        icon.className = type === 'success' ? 'fas fa-check-circle' : type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-info-circle';
+        icon.className = type === 'success' ? 'fas fa-check-circle'
+                       : type === 'error'   ? 'fas fa-exclamation-circle'
+                       : 'fas fa-info-circle';
       }
       clearTimeout(toastTimer);
       void el.offsetWidth;
@@ -293,41 +281,53 @@
       toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3500);
     }
 
-    // Modal
+    // ================================================
+    //  MODALS
+    // ================================================
     function openModal(id) {
       closeAllModals();
-      $(id).classList.add('active');
-      document.body.style.overflow = 'hidden';
+      var m = $(id);
+      if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; }
     }
 
     function closeModal(id) {
-      $(id).classList.remove('active');
+      var m = $(id);
+      if (m) m.classList.remove('active');
       if (!document.querySelector('.modal-overlay.active')) {
         document.body.style.overflow = '';
       }
     }
 
     function closeAllModals() {
-      document.querySelectorAll('.modal-overlay').forEach(function (m) { m.classList.remove('active'); });
+      $qa('.modal-overlay').forEach(function (m) { m.classList.remove('active'); });
       document.body.style.overflow = '';
     }
 
-    // Overlay click
-    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+    // Overlay click to close
+    $qa('.modal-overlay').forEach(function (overlay) {
       overlay.addEventListener('click', function (e) {
         if (e.target === this) {
           this.classList.remove('active');
-          if (!document.querySelector('.modal-overlay.active')) document.body.style.overflow = '';
+          if (!document.querySelector('.modal-overlay.active')) {
+            document.body.style.overflow = '';
+          }
         }
       });
     });
 
+    // data-close buttons
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-close]');
+      if (btn) closeModal(btn.getAttribute('data-close'));
+    });
+
+    // ESC key
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeAllModals();
     });
 
     // ================================================
-    //  PATIENT LIST
+    //  PATIENT LIST STORAGE
     // ================================================
     function getPatientList() {
       try {
@@ -336,15 +336,31 @@
     }
 
     function savePatientList(list) {
-      localStorage.setItem('nep_patient_list', JSON.stringify(list));
+      try {
+        localStorage.setItem('nep_patient_list', JSON.stringify(list));
+      } catch (e) { console.warn('Save list error:', e); }
     }
 
+    function getBaseUrl() {
+      var url = window.location.href;
+      // Remove admin.html or anything after the last /
+      var idx = url.lastIndexOf('/');
+      return url.substring(0, idx + 1);
+    }
+
+    function getPatientUrl(patientId) {
+      return getBaseUrl() + 'index.html?patient=' + encodeURIComponent(patientId);
+    }
+
+    // ================================================
+    //  RENDER PATIENT LIST
+    // ================================================
     function renderPatientList() {
       var list = getPatientList();
       var container = $('patientList');
       var emptyMsg = $('emptyPatients');
 
-      // Ensure demo patient is in list
+      // Ensure demo patient exists
       if (list.length === 0) {
         list = [{ id: 'demo-patient-001', name: 'Sophia Marie Dela Cruz' }];
         savePatientList(list);
@@ -357,8 +373,7 @@
         var card = document.createElement('div');
         card.className = 'patient-card';
 
-        var baseUrl = window.location.origin + window.location.pathname.replace('admin.html', '');
-        var patientUrl = baseUrl + 'index.html?patient=' + encodeURIComponent(p.id);
+        var patientUrl = getPatientUrl(p.id);
 
         card.innerHTML =
           '<div class="patient-info">' +
@@ -370,8 +385,8 @@
           '</div>' +
           '<div class="patient-actions">' +
             '<a href="' + patientUrl + '" class="btn btn-sm btn-outline" target="_blank"><i class="fas fa-external-link-alt"></i> Open</a>' +
-            '<button class="btn btn-sm btn-primary" onclick="showQR(\'' + esc(p.id) + '\', \'' + esc(p.name).replace(/'/g, "\\'") + '\')"><i class="fas fa-qrcode"></i> QR Code</button>' +
-            '<button class="btn btn-sm btn-danger" onclick="deletePatient(\'' + esc(p.id) + '\', \'' + esc(p.name).replace(/'/g, "\\'") + '\')"><i class="fas fa-trash"></i></button>' +
+            '<button class="btn btn-sm btn-primary" data-action="qr" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-qrcode"></i> QR Code</button>' +
+            '<button class="btn btn-sm btn-danger" data-action="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-trash"></i> Delete</button>' +
           '</div>';
 
         container.appendChild(card);
@@ -379,22 +394,126 @@
     }
 
     // ================================================
+    //  EVENT DELEGATION FOR PATIENT LIST
+    // ================================================
+    $('patientList').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-action]');
+      if (!btn) return;
+
+      var action = btn.getAttribute('data-action');
+      var id = btn.getAttribute('data-id');
+      var name = btn.getAttribute('data-name');
+
+      if (action === 'qr') {
+        showQRCode(id, name);
+      } else if (action === 'delete') {
+        confirmDeletePatient(id, name);
+      }
+    });
+
+    // ================================================
+    //  QR CODE GENERATION
+    // ================================================
+    var currentQR = { id: '', name: '', url: '', dataUrl: '' };
+
+    function showQRCode(patientId, patientName) {
+      var url = getPatientUrl(patientId);
+      currentQR = { id: patientId, name: patientName, url: url, dataUrl: '' };
+
+      // Show loading state
+      $('qrLoading').style.display = 'block';
+      $('qrImage').style.display = 'none';
+      $('downloadQRBtn').style.display = 'none';
+      $('qrUrlText').innerHTML = '<strong>Patient:</strong> ' + esc(patientName) + '<br><strong>URL:</strong> ' + esc(url);
+
+      openModal('qrModal');
+
+      // Check if QRCode library is loaded
+      if (typeof QRCode === 'undefined' || !QRCode || !QRCode.toDataURL) {
+        // Try to load it dynamically
+        loadQRLibrary(function (success) {
+          if (success) {
+            generateQRImage(url);
+          } else {
+            $('qrLoading').innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i><br><br>QR library failed to load.<br>Copy the URL manually:<br><br><strong>' + esc(url) + '</strong>';
+          }
+        });
+      } else {
+        generateQRImage(url);
+      }
+    }
+
+    function loadQRLibrary(callback) {
+      var script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js';
+      script.onload = function () { callback(true); };
+      script.onerror = function () {
+        // Try another CDN
+        var script2 = document.createElement('script');
+        script2.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
+        script2.onload = function () { callback(true); };
+        script2.onerror = function () { callback(false); };
+        document.head.appendChild(script2);
+      };
+      document.head.appendChild(script);
+    }
+
+    function generateQRImage(url) {
+      try {
+        QRCode.toDataURL(url, {
+          width: 320,
+          margin: 2,
+          color: {
+            dark: '#1a3a5c',
+            light: '#ffffff'
+          }
+        }, function (err, dataUrl) {
+          if (err) {
+            console.error('QR Error:', err);
+            $('qrLoading').innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i><br><br>Error generating QR code.<br>Copy the URL manually:<br><br><strong>' + esc(url) + '</strong>';
+            return;
+          }
+
+          currentQR.dataUrl = dataUrl;
+          $('qrImage').src = dataUrl;
+          $('qrImage').style.display = 'block';
+          $('qrLoading').style.display = 'none';
+          $('downloadQRBtn').style.display = 'inline-flex';
+        });
+      } catch (err) {
+        console.error('QR Exception:', err);
+        $('qrLoading').innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i><br><br>Error generating QR code.<br>Copy the URL manually:<br><br><strong>' + esc(url) + '</strong>';
+      }
+    }
+
+    // Download QR
+    $('downloadQRBtn').addEventListener('click', function () {
+      if (!currentQR.dataUrl) {
+        toast('QR code not ready yet.', 'error');
+        return;
+      }
+      var link = document.createElement('a');
+      link.download = 'qr-' + currentQR.name.replace(/\s+/g, '-').toLowerCase() + '.png';
+      link.href = currentQR.dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast('QR code downloaded!');
+    });
+
+    // ================================================
     //  ADD PATIENT
     // ================================================
     $('addPatientBtn').addEventListener('click', function () {
       $('addPatientForm').reset();
-      document.querySelectorAll('#addPatientForm .form-group').forEach(function (g) {
-        g.classList.remove('has-error');
-      });
+      $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
       $('errId').style.display = 'none';
       openModal('addPatientModal');
     });
 
     $('saveNewPatientBtn').addEventListener('click', function () {
       // Clear errors
-      document.querySelectorAll('#addPatientForm .form-group').forEach(function (g) {
-        g.classList.remove('has-error');
-      });
+      $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
       $('errId').style.display = 'none';
 
       var newId = $('newPatientId').value.trim();
@@ -408,7 +527,7 @@
 
       var valid = true;
 
-      // Validate ID
+      // Validate Patient ID
       if (!newId) {
         $('newPatientId').closest('.form-group').classList.add('has-error');
         $('errId').style.display = 'block';
@@ -419,19 +538,15 @@
         $('errId').style.display = 'block';
         $('errId').textContent = 'Use only letters, numbers, and dashes.';
         valid = false;
-      } else {
-        // Check if ID already exists
-        var existing = getPatientList().find(function (p) { return p.id === newId; });
-        if (existing) {
-          $('newPatientId').closest('.form-group').classList.add('has-error');
-          $('errId').style.display = 'block';
-          $('errId').textContent = 'This Patient ID already exists!';
-          valid = false;
-        }
+      } else if (getPatientList().some(function (p) { return p.id === newId; })) {
+        $('newPatientId').closest('.form-group').classList.add('has-error');
+        $('errId').style.display = 'block';
+        $('errId').textContent = 'This Patient ID already exists!';
+        valid = false;
       }
 
-      // Validate required fields
-      var fields = [
+      // Validate other required fields
+      var checks = [
         { el: $('newName'), val: name },
         { el: $('newAge'), val: age },
         { el: $('newGender'), val: gender },
@@ -441,9 +556,9 @@
         { el: $('newAddress'), val: address }
       ];
 
-      fields.forEach(function (f) {
-        if (!f.val) {
-          f.el.closest('.form-group').classList.add('has-error');
+      checks.forEach(function (c) {
+        if (!c.val) {
+          c.el.closest('.form-group').classList.add('has-error');
           valid = false;
         }
       });
@@ -454,82 +569,36 @@
       }
 
       // Save patient data
-      var patientData = {
-        id: newId, name: name, age: age, gender: gender,
-        birthday: birthday, guardian: guardian, contact: contact,
-        address: address, avatar: ''
-      };
-
       try {
+        var patientData = {
+          id: newId, name: name, age: age, gender: gender,
+          birthday: birthday, guardian: guardian, contact: contact,
+          address: address, avatar: ''
+        };
+
         localStorage.setItem('nep_patient_' + newId, JSON.stringify(patientData));
         localStorage.setItem('nep_records_' + newId, JSON.stringify([]));
         localStorage.setItem('nep_files_' + newId, JSON.stringify([]));
 
-        // Update list
         var list = getPatientList();
         list.push({ id: newId, name: name });
         savePatientList(list);
       } catch (e) {
-        toast('Error saving patient.', 'error');
+        toast('Error saving patient. Storage may be full.', 'error');
         return;
       }
 
       renderPatientList();
       closeModal('addPatientModal');
       toast('Patient "' + name + '" added successfully!');
-
-      // Clear form errors on input
-      document.addEventListener('input', function (e) {
-        var group = e.target.closest('.form-group.has-error');
-        if (group) {
-          group.classList.remove('has-error');
-          var err = group.querySelector('.err');
-          if (err) err.style.display = 'none';
-        }
-      });
     });
-
-    // ================================================
-    //  QR CODE
-    // ================================================
-    var currentQRPatient = { id: '', name: '' };
-
-    function showQR(patientId, patientName) {
-      currentQRPatient = { id: patientId, name: patientName };
-
-      var baseUrl = window.location.origin + window.location.pathname.replace('admin.html', '');
-      var url = baseUrl + 'index.html?patient=' + encodeURIComponent(patientId);
-
-      $('qrUrlText').innerHTML = '<strong>Patient:</strong> ' + esc(patientName) + '<br><strong>URL:</strong> ' + esc(url);
-
-      QRCode.toDataURL(url, {
-        width: 320,
-        margin: 2,
-        color: { dark: '#1a3a5c', light: '#ffffff' }
-      }, function (err, dataUrl) {
-        if (err) {
-          toast('Error generating QR code.', 'error');
-          return;
-        }
-        $('qrImage').src = dataUrl;
-        openModal('qrModal');
-      });
-    }
-
-    function downloadQR() {
-      var link = document.createElement('a');
-      link.download = 'qr-' + currentQRPatient.name.replace(/\s+/g, '-').toLowerCase() + '.png';
-      link.href = $('qrImage').src;
-      link.click();
-      toast('QR code downloaded!');
-    }
 
     // ================================================
     //  DELETE PATIENT
     // ================================================
     var pendingDeleteId = '';
 
-    function deletePatient(patientId, patientName) {
+    function confirmDeletePatient(patientId, patientName) {
       pendingDeleteId = patientId;
       $('deletePatientMsg').innerHTML =
         'Are you sure you want to permanently delete <strong>' + esc(patientName) + '</strong>?<br><br>' +
@@ -541,13 +610,11 @@
     $('confirmDeletePatientBtn').addEventListener('click', function () {
       if (!pendingDeleteId) return;
 
-      // Remove all data for this patient
       try {
         localStorage.removeItem('nep_patient_' + pendingDeleteId);
         localStorage.removeItem('nep_records_' + pendingDeleteId);
         localStorage.removeItem('nep_files_' + pendingDeleteId);
 
-        // Remove from list
         var list = getPatientList().filter(function (p) { return p.id !== pendingDeleteId; });
         savePatientList(list);
       } catch (e) {
@@ -562,7 +629,7 @@
     });
 
     // ================================================
-    //  CLEAR FORM ERRORS ON TYPING
+    //  CLEAR ERRORS ON TYPING
     // ================================================
     document.addEventListener('input', function (e) {
       var group = e.target.closest('.form-group.has-error');
@@ -580,6 +647,8 @@
     console.log('%c ADMIN %c Patient Management Ready',
       'background:#1a3a5c;color:#fff;padding:4px 10px;border-radius:4px 0 0 4px;font-weight:700;',
       'background:#2e86de;color:#fff;padding:4px 10px;border-radius:0 4px 4px 0;');
+
+  })();
   </script>
 
 </body>
