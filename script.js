@@ -394,6 +394,11 @@
   // ================================================
   //  PATIENT EDIT
   // ================================================
+   // ================================================
+  //  PATIENT EDIT (with photo upload)
+  // ================================================
+  var editAvatarData = '';
+
   $('editPatientBtn').addEventListener('click', function () {
     $('editName').value     = patient.name     || '';
     $('editAge').value      = patient.age       || '';
@@ -402,9 +407,55 @@
     $('editGuardian').value = patient.guardian  || '';
     $('editContact').value  = patient.contact   || '';
     $('editAddress').value  = patient.address   || '';
-    $('editAvatar').value   = patient.avatar    || '';
+
+    // Set avatar preview
+    editAvatarData = patient.avatar || '';
+    updateAvatarPreview();
+
     clearFormErrors($('patientForm'));
     openModal('patientModal');
+  });
+
+  function updateAvatarPreview() {
+    var img = $('avatarPreviewImg');
+    var fallback = $('avatarPreviewFallback');
+    if (editAvatarData && editAvatarData !== '') {
+      img.src = editAvatarData;
+      img.style.display = 'block';
+      fallback.style.display = 'none';
+    } else {
+      img.style.display = 'none';
+      fallback.style.display = 'flex';
+    }
+  }
+
+  $('choosePhotoBtn').addEventListener('click', function () {
+    $('editAvatarFile').click();
+  });
+
+  $('editAvatarFile').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast('Photo must be under 2 MB.', 'error');
+      e.target.value = '';
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      editAvatarData = ev.target.result;
+      updateAvatarPreview();
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  });
+
+  $('removePhotoBtn').addEventListener('click', function () {
+    editAvatarData = '';
+    updateAvatarPreview();
+    toast('Photo removed.', 'info');
   });
 
   $('savePatientBtn').addEventListener('click', function () {
@@ -429,7 +480,7 @@
     patient.guardian = $('editGuardian').value.trim();
     patient.contact  = $('editContact').value.trim();
     patient.address  = $('editAddress').value.trim();
-    patient.avatar   = $('editAvatar').value.trim();
+    patient.avatar   = editAvatarData || '';
 
     saveToStorage();
     renderPatient();
