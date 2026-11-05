@@ -680,7 +680,16 @@
     console.log('%c ADMIN %c Ready', 'background:#1a3a5c;color:#fff;padding:4px 10px;border-radius:4px 0 0 4px;font-weight:700;', 'background:#2e86de;color:#fff;padding:4px 10px;border-radius:0 4px 4px 0;');
 
   })();
+
+  // Auto-refresh when returning to this page
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) location.reload();
+  });
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) location.reload();
+  });
+
   </script>
 
 </body>
-</html> 
+</html>
