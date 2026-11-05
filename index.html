@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEW ERA PEDIATRIC – Patient Records</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<header class="navbar">
+  <div class="navbar-inner">
+    <div class="brand">
+      <div class="brand-icon"><i class="fas fa-child"></i></div>
+      <div>
+        <h1 class="brand-name">NEW ERA PEDIATRIC</h1>
+        <p class="brand-sub">Patient Medical Records</p>
+      </div>
+    </div>
+    <div class="navbar-right">
+      <button class="btn btn-nav" id="printBtn" title="Print Patient Record">
+        <i class="fas fa-print"></i><span class="btn-text">Print</span>
+      </button>
+      <button class="btn btn-nav" id="resetBtn" title="Reset to Demo Data">
+        <i class="fas fa-rotate-right"></i><span class="btn-text">Reset</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MAIN ===================== -->
+<main class="container">
+
+  <!-- STATS BAR -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card">
+      <div class="stat-icon blue"><i class="fas fa-notes-medical"></i></div>
+      <div class="stat-info">
+        <span class="stat-value" id="statRecords">0</span>
+        <span class="stat-label">Total Records</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
+      <div class="stat-info">
+        <span class="stat-value" id="statLastVisit">—</span>
+        <span class="stat-label">Last Visit</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange"><i class="fas fa-folder-open"></i></div>
+      <div class="stat-info">
+        <span class="stat-value" id="statFiles">0</span>
+        <span class="stat-label">Files Uploaded</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple"><i class="fas fa-heart-pulse"></i></div>
+      <div class="stat-info">
+        <span class="stat-value" id="statStatus">Active</span>
+        <span class="stat-label">Patient Status</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATIENT PROFILE -->
+  <section class="section">
+    <div class="section-header">
+      <h2><i class="fas fa-user-circle"></i> Patient Profile</h2>
+      <button class="btn btn-primary" id="editPatientBtn">
+        <i class="fas fa-pen"></i> Edit Patient Details
+      </button>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-avatar" id="avatarWrap">
+        <img id="patientAvatar" src="" alt="Patient Photo" />
+        <div class="avatar-fallback" id="avatarFallback">
+          <i class="fas fa-child"></i>
+        </div>
+      </div>
+      <div class="profile-info">
+        <div class="info-grid">
+          <div class="info-box">
+            <label><i class="fas fa-user"></i> Full Name</label>
+            <p id="patientName">—</p>
+          </div>
+          <div class="info-box">
+            <label><i class="fas fa-birthday-cake"></i> Age</label>
+            <p id="patientAge">—</p>
+          </div>
+          <div class="info-box">
+            <label><i class="fas fa-venus-mars"></i> Gender</label>
+            <p id="patientGender">—</p>
+          </div>
+          <div class="info-box">
+            <label><i class="fas fa-calendar-day"></i> Date of Birth</label>
+            <p id="patientBirthday">—</p>
+          </div>
+          <div class="info-box">
+            <label><i class="fas fa-users"></i> Parent / Guardian</label>
+            <p id="guardian">—</p>
+          </div>
+          <div class="info-box">
+            <label><i class="fas fa-phone"></i> Contact Number</label>
+            <p id="contact">—</p>
+          </div>
+          <div class="info-box full-width">
+            <label><i class="fas fa-map-marker-alt"></i> Complete Address</label>
+            <p id="address">—</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEDICAL HISTORY -->
+  <section class="section">
+    <div class="section-header">
+      <h2><i class="fas fa-notes-medical"></i> Medical History</h2>
+      <div class="header-actions">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchRecords" placeholder="Search records..." />
+        </div>
+        <button class="btn btn-success" id="addRecordBtn">
+          <i class="fas fa-plus-circle"></i> Add Record
+        </button>
+      </div>
+    </div>
+    <div class="medical-history" id="medicalHistory"></div>
+    <div class="empty-message" id="emptyMessage">
+      <i class="fas fa-folder-open"></i>
+      <p>No medical records available.</p>
+      <span>Click "Add Record" to create one.</span>
+    </div>
+    <div class="empty-message hidden" id="noResults">
+      <i class="fas fa-search"></i>
+      <p>No records match your search.</p>
+    </div>
+  </section>
+
+  <!-- FILES -->
+  <section class="section">
+    <div class="section-header">
+      <h2><i class="fas fa-file-medical"></i> Medical Files &amp; Documents</h2>
+      <button class="btn btn-outline" id="uploadFileBtn">
+        <i class="fas fa-upload"></i> Upload Files
+      </button>
+    </div>
+
+    <!-- Drag & Drop Zone -->
+    <div class="drop-zone" id="dropZone">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p>Drag &amp; drop files here or click to browse</p>
+        <span class="drop-hint">Supports images, PDFs, documents — max 5 MB each</span>
+    </div>
+    <input type="file" id="fileInput" multiple hidden />
+
+    <ul class="file-list" id="fileList"></ul>
+    <div class="empty-message" id="emptyFiles">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p>No files uploaded yet.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 NEW ERA PEDIATRIC. All rights reserved.</p>
+</footer>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+<!-- ===================== MODAL: PATIENT EDIT ===================== -->
+<div class="modal-overlay" id="patientModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3><i class="fas fa-user-edit"></i> Edit Patient Details</h3>
+      <button class="modal-close" data-close="patientModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="patientForm" autocomplete="off">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="editName" required />
+          </div>
+          <div class="form-group">
+            <label>Age *</label>
+            <input type="text" id="editAge" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gender *</label>
+            <select id="editGender" required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date of Birth *</label>
+            <input type="date" id="editBirthday" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Parent / Guardian *</label>
+            <input type="text" id="editGuardian" required />
+          </div>
+          <div class="form-group">
+            <label>Contact Number *</label>
+            <input type="tel" id="editContact" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Complete Address *</label>
+          <input type="text" id="editAddress" required />
+        </div>
+        <div class="form-group">
+          <label>Profile Picture URL <span class="opt">(optional)</span></label>
+          <input type="url" id="editAvatar" placeholder="https://example.com/photo.jpg" />
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="patientModal"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn btn-primary" id="savePatientBtn"><i class="fas fa-save"></i> Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: ADD / EDIT RECORD ===================== -->
+<div class="modal-overlay" id="recordModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="recordModalTitle"><i class="fas fa-file-medical"></i> Add Medical Record</h3>
+      <button class="modal-close" data-close="recordModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="recordForm" autocomplete="off">
+        <input type="hidden" id="recordId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date of Visit *</label>
+            <input type="date" id="recDate" required />
+          </div>
+          <div class="form-group">
+            <label>Doctor's Name <span class="opt">(optional)</span></label>
+            <input type="text" id="recDoctor" placeholder="e.g. Dr. Santos" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Chief Complaint *</label>
+          <input type="text" id="recComplaint" placeholder="e.g. Fever, cough" required />
+        </div>
+        <div class="form-group">
+          <label>Diagnosis *</label>
+          <input type="text" id="recDiagnosis" placeholder="e.g. Upper respiratory tract infection" required />
+        </div>
+        <div class="form-group">
+          <label>Doctor's Notes <span class="opt">(optional)</span></label>
+          <textarea id="recNotes" rows="3" placeholder="Observations, findings..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Prescription / Medication <span class="opt">(optional)</span></label>
+          <textarea id="recPrescription" rows="2" placeholder="e.g. Paracetamol 250mg every 6 hours"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Treatment / Recommendations <span class="opt">(optional)</span></label>
+          <textarea id="recTreatment" rows="2" placeholder="e.g. Rest, hydration, follow-up in 1 week"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="recordModal"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn btn-success" id="saveRecordBtn"><i class="fas fa-save"></i> <span id="saveRecordText">Save Record</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: VIEW RECORD ===================== -->
+<div class="modal-overlay" id="viewModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3><i class="fas fa-eye"></i> Medical Record Details</h3>
+      <button class="modal-close" data-close="viewModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="viewContent"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" data-close="viewModal"><i class="fas fa-times"></i> Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: FILE PREVIEW ===================== -->
+<div class="modal-overlay" id="filePreviewModal">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <h3><i class="fas fa-file-image"></i> File Preview</h3>
+      <button class="modal-close" data-close="filePreviewModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="filePreviewContent"></div>
+    <div class="modal-footer">
+      <a class="btn btn-outline" id="downloadFileLink" download><i class="fas fa-download"></i> Download</a>
+      <button class="btn btn-primary" data-close="filePreviewModal"><i class="fas fa-times"></i> Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: CONFIRM DELETE ===================== -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal modal-small">
+    <div class="modal-header">
+      <h3 class="danger-title"><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h3>
+      <button class="modal-close" data-close="confirmModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-msg" id="confirmMsg">Are you sure you want to delete this item?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="confirmModal"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: PRINT PREVIEW ===================== -->
+<div class="modal-overlay" id="printModal">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <h3><i class="fas fa-print"></i> Patient Record Summary</h3>
+      <button class="modal-close" data-close="printModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="printContent"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="printModal"><i class="fas fa-times"></i> Close</button>
+      <button class="btn btn-primary" id="doPrintBtn"><i class="fas fa-print"></i> Print / Save PDF</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
