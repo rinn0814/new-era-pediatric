@@ -15,21 +15,34 @@
 <!-- ===================== NAVBAR ===================== -->
 <header class="navbar">
   <div class="navbar-inner">
-    <div class="brand">
-      <div class="brand-icon"><i class="fas fa-child"></i></div>
-      <div>
-        <h1 class="brand-name">NEW ERA PEDIATRIC</h1>
-        <p class="brand-sub">Patient Medical Records</p>
+
+    <!-- BACK BUTTON + BRAND -->
+    <div class="navbar-left">
+      <a href="admin.html" class="back-btn admin-only" id="backButton" title="Back to Patient Management">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <div class="brand">
+        <div class="brand-icon"><i class="fas fa-child"></i></div>
+        <div>
+          <h1 class="brand-name">NEW ERA PEDIATRIC</h1>
+          <p class="brand-sub">Patient Medical Records</p>
+        </div>
       </div>
     </div>
+
+    <!-- NAVBAR BUTTONS -->
     <div class="navbar-right">
-      <button class="btn btn-nav" id="printBtn" title="Print Patient Record">
+      <a href="admin.html" class="btn-nav admin-only" id="managePatientsBtn" title="Patient Management">
+        <i class="fas fa-user-plus"></i><span class="btn-text">Manage Patients</span>
+      </a>
+      <button class="btn-nav" id="printBtn" title="Print Patient Record">
         <i class="fas fa-print"></i><span class="btn-text">Print</span>
       </button>
-      <button class="btn btn-nav" id="resetBtn" title="Reset to Demo Data">
+      <button class="btn-nav" id="resetBtn" title="Reset to Demo Data">
         <i class="fas fa-rotate-right"></i><span class="btn-text">Reset</span>
       </button>
     </div>
+
   </div>
 </header>
 
@@ -158,7 +171,7 @@
     <div class="drop-zone" id="dropZone">
       <i class="fas fa-cloud-upload-alt"></i>
       <p>Drag &amp; drop files here or click to browse</p>
-        <span class="drop-hint">Supports images, PDFs, documents — max 5 MB each</span>
+      <span class="drop-hint">Supports images, PDFs, documents — max 5 MB each</span>
     </div>
     <input type="file" id="fileInput" multiple hidden />
 

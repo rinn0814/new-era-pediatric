@@ -15,6 +15,7 @@
   }
 
   const PATIENT_ID = getPatientIdFromURL();
+  const HAS_PATIENT_PARAM = new URLSearchParams(window.location.search).has('patient');
 
   // ================================================
   //  STORAGE KEYS (per patient)
@@ -280,7 +281,7 @@
     $('statFiles').textContent = files.length;
   }
 
-    // ================================================
+  // ================================================
   //  RENDER RECORDS
   // ================================================
   function renderRecords() {
@@ -392,9 +393,6 @@
   });
 
   // ================================================
-  //  PATIENT EDIT
-  // ================================================
-   // ================================================
   //  PATIENT EDIT (with photo upload)
   // ================================================
   var editAvatarData = '';
@@ -626,7 +624,7 @@
     pendingDelete = { type: null, id: null, index: null };
   });
 
-    // ================================================
+  // ================================================
   //  FILE UPLOAD
   // ================================================
   var fileInput = $('fileInput');
@@ -820,6 +818,13 @@
   //  INITIALIZE
   // ================================================
   function init() {
+    // Privacy: hide admin navigation when opened via patient QR/URL
+    if (HAS_PATIENT_PARAM) {
+      document.body.classList.add('patient-mode');
+    } else {
+      document.body.classList.remove('patient-mode');
+    }
+
     loadFromStorage();
     renderPatient();
     renderRecords();
