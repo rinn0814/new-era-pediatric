@@ -6,6 +6,7 @@
   <title>Admin – Patient Management | NEW ERA PEDIATRIC</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" type="image/png" href="logo.png" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #f7f8fc; color: #1e293b; min-height: 100vh; }
@@ -13,7 +14,7 @@
     .navbar { background: linear-gradient(135deg, #1a3a5c, #1b5fae); padding: 0 24px; box-shadow: 0 3px 16px rgba(26,58,92,.35); position: sticky; top: 0; z-index: 100; }
     .navbar-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 70px; }
     .brand { display: flex; align-items: center; gap: 12px; color: #fff; }
-    .brand-icon { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+    .brand-logo { height: 44px; width: 44px; object-fit: contain; border-radius: 50%; background: rgba(255,255,255,.15); padding: 3px; }
     .brand-name { font-size: 1.15rem; font-weight: 800; letter-spacing: .5px; }
     .brand-sub { font-size: .68rem; color: rgba(255,255,255,.65); text-transform: uppercase; letter-spacing: 1px; }
     .nav-link { background: rgba(255,255,255,.12); color: rgba(255,255,255,.9); padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: .85rem; font-weight: 500; border: 1px solid rgba(255,255,255,.18); transition: .25s; display: inline-flex; align-items: center; gap: 6px; }
@@ -86,6 +87,9 @@
 
     .footer { text-align: center; padding: 24px; color: #8e99aa; font-size: .82rem; border-top: 1px solid #eef0f6; background: #fff; }
 
+    .sync-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: .75rem; font-weight: 600; background: #dcfce7; color: #166534; }
+    .sync-badge.syncing { background: #fef3c7; color: #92400e; }
+
     @media (max-width: 768px) {
       .navbar-inner { flex-direction: column; height: auto; padding: 14px 0; gap: 10px; }
       .form-row { grid-template-columns: 1fr; gap: 0; }
@@ -95,6 +99,9 @@
       .section { padding: 20px; }
       .qr-buttons { flex-direction: column; }
       .qr-buttons .btn { width: 100%; justify-content: center; }
+      .section-header { flex-direction: column; align-items: stretch; text-align: center; }
+      .section-header h2 { justify-content: center; }
+      .patient-actions { width: 100%; justify-content: center; }
     }
   </style>
 </head>
@@ -103,13 +110,16 @@
   <header class="navbar">
     <div class="navbar-inner">
       <div class="brand">
-        <div class="brand-icon"><i class="fas fa-child"></i></div>
+        <img src="logo.png" alt="New Era Pediatric Logo" class="brand-logo" />
         <div>
           <div class="brand-name">NEW ERA PEDIATRIC</div>
           <div class="brand-sub">Admin – Patient Management</div>
         </div>
       </div>
-      <a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Patient Records</a>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="sync-badge syncing" id="syncBadge"><i class="fas fa-spinner fa-spin"></i> Connecting...</div>
+        <a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Patient Records</a>
+      </div>
     </div>
   </header>
 
@@ -250,446 +260,585 @@
     </div>
   </div>
 
-  <script>
-  (function () {
-    'use strict';
+  <!-- ===================== FIREBASE (CDN) ===================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import {
+      getFirestore, doc, setDoc, getDoc, deleteDoc,
+      collection, addDoc, onSnapshot, query, orderBy, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-    function $(id) { return document.getElementById(id); }
-    function $qa(sel) { return document.querySelectorAll(sel); }
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmjJt58G5XFxykN0MhzzgwzRGeCOekkM",
+      authDomain: "new-era-pediatric.firebaseapp.com",
+      projectId: "new-era-pediatric",
+      storageBucket: "new-era-pediatric.firebasestorage.app",
+      messagingSenderId: "441796543456",
+      appId: "1:441796543456:web:79e51a79adca6832d1a185",
+      measurementId: "G-EKDHPWJV76"
+    };
 
-    function esc(str) {
-      if (!str) return '';
-      var d = document.createElement('div');
-      d.textContent = str;
-      return d.innerHTML;
-    }
+    const firebaseApp = initializeApp(firebaseConfig);
+    const db = getFirestore(firebaseApp);
 
-    // ================================================
-    //  TOAST
-    // ================================================
-    var toastTimer = null;
-    function toast(msg, type) {
-      type = type || 'success';
-      var el = $('toast');
-      $('toastMsg').textContent = msg;
-      el.className = 'toast ' + type;
-      var icon = el.querySelector('i');
-      if (icon) {
-        icon.className = type === 'success' ? 'fas fa-check-circle'
-                       : type === 'error'   ? 'fas fa-exclamation-circle'
-                       : 'fas fa-info-circle';
+    (function () {
+      'use strict';
+
+      function $(id) { return document.getElementById(id); }
+      function $qa(sel) { return document.querySelectorAll(sel); }
+
+      function esc(str) {
+        if (!str) return '';
+        var d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
       }
-      clearTimeout(toastTimer);
-      void el.offsetWidth;
-      el.classList.add('show');
-      toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3500);
-    }
 
-    // ================================================
-    //  MODALS
-    // ================================================
-    function openModal(id) {
-      closeAllModals();
-      var m = $(id);
-      if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; }
-    }
-    function closeModal(id) {
-      var m = $(id);
-      if (m) m.classList.remove('active');
-      if (!document.querySelector('.modal-overlay.active')) document.body.style.overflow = '';
-    }
-    function closeAllModals() {
-      $qa('.modal-overlay').forEach(function (m) { m.classList.remove('active'); });
-      document.body.style.overflow = '';
-    }
-
-    $qa('.modal-overlay').forEach(function (overlay) {
-      overlay.addEventListener('click', function (e) {
-        if (e.target === this) {
-          this.classList.remove('active');
-          if (!document.querySelector('.modal-overlay.active')) document.body.style.overflow = '';
+      // ================================================
+      //  TOAST
+      // ================================================
+      var toastTimer = null;
+      function toast(msg, type) {
+        type = type || 'success';
+        var el = $('toast');
+        $('toastMsg').textContent = msg;
+        el.className = 'toast ' + type;
+        var icon = el.querySelector('i');
+        if (icon) {
+          icon.className = type === 'success' ? 'fas fa-check-circle'
+                         : type === 'error'   ? 'fas fa-exclamation-circle'
+                         : 'fas fa-info-circle';
         }
-      });
-    });
-
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-close]');
-      if (btn) closeModal(btn.getAttribute('data-close'));
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeAllModals();
-    });
-
-    // ================================================
-    //  STORAGE
-    // ================================================
-    function getPatientList() {
-      try { return JSON.parse(localStorage.getItem('nep_patient_list') || '[]'); }
-      catch (e) { return []; }
-    }
-    function savePatientList(list) {
-      try { localStorage.setItem('nep_patient_list', JSON.stringify(list)); } catch (e) {}
-    }
-
-    function getBaseUrl() {
-      return window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-    }
-
-    function getPatientUrl(id) {
-      return getBaseUrl() + 'index.html?patient=' + encodeURIComponent(id);
-    }
-
-    // ================================================
-    //  RENDER PATIENT LIST
-    // ================================================
-    function renderPatientList() {
-      var list = getPatientList();
-      var container = $('patientList');
-      var emptyMsg = $('emptyPatients');
-
-      if (list.length === 0) {
-        list = [{ id: 'demo-patient-001', name: 'Sophia Marie Dela Cruz' }];
-        savePatientList(list);
+        clearTimeout(toastTimer);
+        void el.offsetWidth;
+        el.classList.add('show');
+        toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3500);
       }
 
-      container.innerHTML = '';
-      emptyMsg.style.display = list.length === 0 ? 'block' : 'none';
+      // ================================================
+      //  MODALS
+      // ================================================
+      function openModal(id) {
+        closeAllModals();
+        var m = $(id);
+        if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; }
+      }
+      function closeModal(id) {
+        var m = $(id);
+        if (m) m.classList.remove('active');
+        if (!document.querySelector('.modal-overlay.active')) document.body.style.overflow = '';
+      }
+      function closeAllModals() {
+        $qa('.modal-overlay').forEach(function (m) { m.classList.remove('active'); });
+        document.body.style.overflow = '';
+      }
 
-      list.forEach(function (p) {
-        var card = document.createElement('div');
-        card.className = 'patient-card';
-
-        // Try to get avatar from storage
-        var avatarHTML = '<div class="patient-avatar-sm"><i class="fas fa-child"></i></div>';
-        try {
-          var pdata = JSON.parse(localStorage.getItem('nep_patient_' + p.id) || 'null');
-          if (pdata && pdata.avatar && pdata.avatar !== '') {
-            avatarHTML = '<div class="patient-avatar-sm"><img src="' + esc(pdata.avatar) + '" alt="" onerror="this.parentElement.innerHTML=\'<i class=&quot;fas fa-child&quot;></i>\'" /></div>';
+      $qa('.modal-overlay').forEach(function (overlay) {
+        overlay.addEventListener('click', function (e) {
+          if (e.target === this) {
+            this.classList.remove('active');
+            if (!document.querySelector('.modal-overlay.active')) document.body.style.overflow = '';
           }
-        } catch (e) {}
-
-        var url = getPatientUrl(p.id);
-
-        card.innerHTML =
-          '<div class="patient-info">' + avatarHTML +
-            '<div>' +
-              '<div class="patient-name">' + esc(p.name) + '</div>' +
-              '<div class="patient-id">ID: ' + esc(p.id) + '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="patient-actions">' +
-            '<a href="' + url + '" class="btn btn-sm btn-outline" target="_blank"><i class="fas fa-external-link-alt"></i> Open</a>' +
-            '<button class="btn btn-sm btn-info" data-action="qr" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-qrcode"></i> QR</button>' +
-            '<button class="btn btn-sm btn-primary" data-action="copy" data-id="' + esc(p.id) + '"><i class="fas fa-copy"></i> Copy Link</button>' +
-            '<button class="btn btn-sm btn-danger" data-action="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-trash"></i></button>' +
-          '</div>';
-
-        container.appendChild(card);
-      });
-    }
-
-    // ================================================
-    //  EVENT DELEGATION
-    // ================================================
-    $('patientList').addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-action]');
-      if (!btn) return;
-      var action = btn.getAttribute('data-action');
-      var id = btn.getAttribute('data-id');
-      var name = btn.getAttribute('data-name');
-
-      if (action === 'qr') showQRCode(id, name);
-      else if (action === 'copy') copyLink(id);
-      else if (action === 'delete') confirmDelete(id, name);
-    });
-
-    // ================================================
-    //  COPY LINK
-    // ================================================
-    function copyLink(patientId) {
-      var url = getPatientUrl(patientId);
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(function () {
-          toast('Link copied to clipboard!');
-        }).catch(function () {
-          fallbackCopy(url);
         });
-      } else {
-        fallbackCopy(url);
+      });
+
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-close]');
+        if (btn) closeModal(btn.getAttribute('data-close'));
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAllModals();
+      });
+
+      // ================================================
+      //  URL HELPERS
+      // ================================================
+      function getBaseUrl() {
+        return window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
       }
-    }
-
-    function fallbackCopy(text) {
-      var ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      try {
-        document.execCommand('copy');
-        toast('Link copied to clipboard!');
-      } catch (e) {
-        toast('Could not copy. Please copy manually.', 'error');
+      function getPatientUrl(id) {
+        return getBaseUrl() + 'index.html?patient=' + encodeURIComponent(id);
       }
-      document.body.removeChild(ta);
-    }
 
-    // ================================================
-    //  QR CODE (uses online API - always works)
-    // ================================================
-    var currentQR = { id: '', name: '', url: '' };
+      // ================================================
+      //  FIREBASE: PATIENT LIST (REAL-TIME)
+      // ================================================
+      var firebasePatients = [];
 
-    function showQRCode(patientId, patientName) {
-      var url = getPatientUrl(patientId);
-      currentQR = { id: patientId, name: patientName, url: url };
+      function renderPatientList() {
+        var container = $('patientList');
+        var emptyMsg = $('emptyPatients');
 
-      $('qrLoading').style.display = 'block';
-      $('qrLoading').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating QR code...';
-      $('qrImage').style.display = 'none';
-      $('downloadQRBtn').style.display = 'none';
-      $('qrUrlText').innerHTML =
-        '<strong>Patient:</strong> ' + esc(patientName) + '<br>' +
-        '<strong>URL:</strong> ' + esc(url);
+        var list = firebasePatients;
 
-      openModal('qrModal');
+        if (list.length === 0) {
+          try {
+            list = JSON.parse(localStorage.getItem('nep_patient_list') || '[]');
+          } catch (e) { list = []; }
+        }
 
-      // Method 1: Use free QR image API (always works, no library needed)
-      var apiURL = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&color=1a3a5c&bgcolor=ffffff&data=' + encodeURIComponent(url);
+        if (list.length === 0) {
+          list = [{ id: 'demo-patient-001', name: 'Sophia Marie Dela Cruz', age: '5 years old', gender: 'Female', birthday: '2020-03-15', guardian: 'Maria Dela Cruz', contact: '+63 917 123 4567', address: '123 Sampaguita St., Barangay San Jose, Quezon City, Metro Manila', avatar: '' }];
+        }
 
-      var img = $('qrImage');
-      img.onload = function () {
+        container.innerHTML = '';
+        emptyMsg.style.display = list.length === 0 ? 'block' : 'none';
+
+        list.forEach(function (p) {
+          var card = document.createElement('div');
+          card.className = 'patient-card';
+
+          var avatarHTML = '<div class="patient-avatar-sm"><i class="fas fa-child"></i></div>';
+          if (p.avatar && p.avatar !== '') {
+            avatarHTML = '<div class="patient-avatar-sm"><img src="' + esc(p.avatar) + '" alt="" onerror="this.parentElement.innerHTML=\'<i class=&quot;fas fa-child&quot;></i>\'" /></div>';
+          }
+
+          var url = getPatientUrl(p.id);
+
+          card.innerHTML =
+            '<div class="patient-info">' + avatarHTML +
+              '<div>' +
+                '<div class="patient-name">' + esc(p.name) + '</div>' +
+                '<div class="patient-id">ID: ' + esc(p.id) + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="patient-actions">' +
+              '<a href="' + url + '" class="btn btn-sm btn-outline" target="_blank"><i class="fas fa-external-link-alt"></i> Open</a>' +
+              '<button class="btn btn-sm btn-info" data-action="qr" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-qrcode"></i> QR</button>' +
+              '<button class="btn btn-sm btn-primary" data-action="copy" data-id="' + esc(p.id) + '"><i class="fas fa-copy"></i> Copy Link</button>' +
+              '<button class="btn btn-sm btn-danger" data-action="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-trash"></i></button>' +
+            '</div>';
+
+          container.appendChild(card);
+        });
+      }
+
+      // ================================================
+      //  FIREBASE: REAL-TIME LISTENER
+      // ================================================
+      function startFirebaseListeners() {
+        var patientsRef = collection(db, "patients");
+
+        onSnapshot(patientsRef, function (snapshot) {
+          var list = [];
+          snapshot.forEach(function (docSnap) {
+            var data = docSnap.data();
+            list.push({
+              id: docSnap.id,
+              name: data.name || 'Unknown',
+              age: data.age || '',
+              gender: data.gender || '',
+              birthday: data.birthday || '',
+              guardian: data.guardian || '',
+              contact: data.contact || '',
+              address: data.address || '',
+              avatar: data.avatar || ''
+            });
+          });
+          firebasePatients = list;
+
+          try {
+            var simpleList = list.map(function (p) { return { id: p.id, name: p.name }; });
+            localStorage.setItem('nep_patient_list', JSON.stringify(simpleList));
+          } catch (e) {}
+
+          renderPatientList();
+
+          var badge = $('syncBadge');
+          if (badge) {
+            badge.className = 'sync-badge';
+            badge.innerHTML = '<i class="fas fa-check-circle"></i> Synced (' + list.length + ' patients)';
+          }
+        }, function (error) {
+          console.warn('Firebase listener error:', error);
+          var badge = $('syncBadge');
+          if (badge) {
+            badge.className = 'sync-badge syncing';
+            badge.innerHTML = '<i class="fas fa-exclamation-circle"></i> Offline mode';
+          }
+        });
+      }
+
+      // ================================================
+      //  FIREBASE: ADD PATIENT
+      // ================================================
+      async function firebaseAddPatient(patientData) {
+        try {
+          if (patientData.avatar && patientData.avatar !== '') {
+            patientData.avatar = await compressAvatar(patientData.avatar);
+          }
+
+          await setDoc(doc(db, "patients", patientData.id), {
+            name: patientData.name || '',
+            age: patientData.age || '',
+            gender: patientData.gender || '',
+            birthday: patientData.birthday || '',
+            guardian: patientData.guardian || '',
+            contact: patientData.contact || '',
+            address: patientData.address || '',
+            avatar: patientData.avatar || '',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+          console.log('Patient added to Firebase:', patientData.id);
+        } catch (e) {
+          console.error('Firebase add error:', e);
+          toast('Cloud sync error. Saved locally.', 'error');
+        }
+      }
+
+      // ================================================
+      //  FIREBASE: DELETE PATIENT
+      // ================================================
+      async function firebaseDeletePatient(patientId) {
+        try {
+          await deleteDoc(doc(db, "patients", patientId));
+          console.log('Patient deleted from Firebase:', patientId);
+        } catch (e) {
+          console.error('Firebase delete error:', e);
+        }
+      }
+
+      // ================================================
+      //  COMPRESS AVATAR
+      // ================================================
+      function compressAvatar(dataUrl) {
+        return new Promise(function (resolve) {
+          var img = new Image();
+          img.onload = function () {
+            var canvas = document.createElement('canvas');
+            var MAX = 300;
+            var w = img.width;
+            var h = img.height;
+            if (w > h) {
+              if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+            } else {
+              if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+            }
+            canvas.width = w;
+            canvas.height = h;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          };
+          img.onerror = function () { resolve(dataUrl); };
+          img.src = dataUrl;
+        });
+      }
+
+      // ================================================
+      //  EVENT DELEGATION
+      // ================================================
+      $('patientList').addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        var action = btn.getAttribute('data-action');
+        var id = btn.getAttribute('data-id');
+        var name = btn.getAttribute('data-name');
+
+        if (action === 'qr') showQRCode(id, name);
+        else if (action === 'copy') copyLink(id);
+        else if (action === 'delete') confirmDelete(id, name);
+      });
+
+      // ================================================
+      //  COPY LINK
+      // ================================================
+      function copyLink(patientId) {
+        var url = getPatientUrl(patientId);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function () {
+            toast('Link copied to clipboard!');
+          }).catch(function () {
+            fallbackCopy(url);
+          });
+        } else {
+          fallbackCopy(url);
+        }
+      }
+
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          toast('Link copied to clipboard!');
+        } catch (e) {
+          toast('Could not copy. Please copy manually.', 'error');
+        }
+        document.body.removeChild(ta);
+      }
+
+      // ================================================
+      //  QR CODE
+      // ================================================
+      var currentQR = { id: '', name: '', url: '' };
+
+      function showQRCode(patientId, patientName) {
+        var url = getPatientUrl(patientId);
+        currentQR = { id: patientId, name: patientName, url: url };
+
+        $('qrLoading').style.display = 'block';
+        $('qrLoading').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating QR code...';
+        $('qrImage').style.display = 'none';
+        $('downloadQRBtn').style.display = 'none';
+        $('qrUrlText').innerHTML =
+          '<strong>Patient:</strong> ' + esc(patientName) + '<br />' +
+          '<strong>URL:</strong> ' + esc(url);
+
+        openModal('qrModal');
+
+        var apiURL = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&color=1a3a5c&bgcolor=ffffff&data=' + encodeURIComponent(url);
+
+        var img = $('qrImage');
+        img.onload = function () {
+          $('qrLoading').style.display = 'none';
+          img.style.display = 'block';
+          $('downloadQRBtn').style.display = 'inline-flex';
+        };
+        img.onerror = function () {
+          tryGenerateQRCanvas(url);
+        };
+        img.src = apiURL;
+      }
+
+      function tryGenerateQRCanvas(url) {
+        var canvas = document.createElement('canvas');
+        canvas.width = 300;
+        canvas.height = 300;
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 300, 300);
+        ctx.strokeStyle = '#1a3a5c';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(10, 10, 280, 280);
+        ctx.fillStyle = '#1a3a5c';
+        ctx.font = 'bold 14px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('QR Code', 150, 80);
+        ctx.font = '11px Inter, sans-serif';
+        ctx.fillStyle = '#8e99aa';
+        ctx.fillText('Copy the URL below', 150, 120);
+        var img = $('qrImage');
+        img.src = canvas.toDataURL();
         $('qrLoading').style.display = 'none';
         img.style.display = 'block';
-        $('downloadQRBtn').style.display = 'inline-flex';
-      };
-      img.onerror = function () {
-        // Method 2: Try generating with canvas
-        tryGenerateQRCanvas(url);
-      };
-      img.src = apiURL;
-    }
+      }
 
-    function tryGenerateQRCanvas(url) {
-      // Fallback: draw a simple QR-like pattern (text-based fallback)
-      var canvas = document.createElement('canvas');
-      canvas.width = 300;
-      canvas.height = 300;
-      var ctx = canvas.getContext('2d');
-
-      // White background
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, 300, 300);
-
-      // Draw border
-      ctx.strokeStyle = '#1a3a5c';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(10, 10, 280, 280);
-
-      // Draw text
-      ctx.fillStyle = '#1a3a5c';
-      ctx.font = 'bold 14px Inter, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('QR Code', 150, 80);
-      ctx.font = '11px Inter, sans-serif';
-      ctx.fillStyle = '#8e99aa';
-      ctx.fillText('Copy the URL below', 150, 120);
-
-      // Try to draw QR using URL pattern
-      var img = $('qrImage');
-      img.src = canvas.toDataURL();
-      $('qrLoading').style.display = 'none';
-      img.style.display = 'block';
-    }
-
-    // Copy link from QR modal
-    $('copyLinkBtn').addEventListener('click', function () {
-      if (!currentQR.url) { toast('No URL to copy.', 'error'); return; }
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(currentQR.url).then(function () {
-          toast('Link copied to clipboard!');
-        }).catch(function () {
+      $('copyLinkBtn').addEventListener('click', function () {
+        if (!currentQR.url) { toast('No URL to copy.', 'error'); return; }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(currentQR.url).then(function () {
+            toast('Link copied to clipboard!');
+          }).catch(function () {
+            fallbackCopy(currentQR.url);
+          });
+        } else {
           fallbackCopy(currentQR.url);
-        });
-      } else {
-        fallbackCopy(currentQR.url);
-      }
-    });
-
-    // Download QR
-    $('downloadQRBtn').addEventListener('click', function () {
-      var img = $('qrImage');
-      if (!img.src) { toast('QR not ready.', 'error'); return; }
-
-      var link = document.createElement('a');
-      link.download = 'qr-' + currentQR.name.replace(/\s+/g, '-').toLowerCase() + '.png';
-      link.href = img.src;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      toast('QR code downloaded!');
-    });
-
-    // ================================================
-    //  ADD PATIENT
-    // ================================================
-    $('addPatientBtn').addEventListener('click', function () {
-      $('addPatientForm').reset();
-      $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
-      $('errId').style.display = 'none';
-      $('newAvatarPreview').style.display = 'none';
-      openModal('addPatientModal');
-    });
-
-    // Avatar preview
-    var avatarData = '';
-
-    $('newAvatarFile').addEventListener('change', function (e) {
-      var file = e.target.files[0];
-      if (!file) { avatarData = ''; $('newAvatarPreview').style.display = 'none'; return; }
-
-      if (file.size > 2 * 1024 * 1024) {
-        toast('Photo must be under 2 MB.', 'error');
-        e.target.value = '';
-        return;
-      }
-
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        avatarData = ev.target.result;
-        $('newAvatarImg').src = avatarData;
-        $('newAvatarPreview').style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    });
-
-    $('saveNewPatientBtn').addEventListener('click', function () {
-      $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
-      $('errId').style.display = 'none';
-
-      var newId = $('newPatientId').value.trim();
-      var name = $('newName').value.trim();
-      var age = $('newAge').value.trim();
-      var gender = $('newGender').value;
-      var birthday = $('newBirthday').value;
-      var guardian = $('newGuardian').value.trim();
-      var contact = $('newContact').value.trim();
-      var address = $('newAddress').value.trim();
-
-      var valid = true;
-
-      if (!newId) {
-        $('newPatientId').closest('.form-group').classList.add('has-error');
-        $('errId').style.display = 'block';
-        $('errId').textContent = 'Patient ID is required.';
-        valid = false;
-      } else if (!/^[a-zA-Z0-9\-]+$/.test(newId)) {
-        $('newPatientId').closest('.form-group').classList.add('has-error');
-        $('errId').style.display = 'block';
-        $('errId').textContent = 'Use only letters, numbers, and dashes.';
-        valid = false;
-      } else if (getPatientList().some(function (p) { return p.id === newId; })) {
-        $('newPatientId').closest('.form-group').classList.add('has-error');
-        $('errId').style.display = 'block';
-        $('errId').textContent = 'This Patient ID already exists!';
-        valid = false;
-      }
-
-      var checks = [
-        { el: $('newName'), val: name }, { el: $('newAge'), val: age },
-        { el: $('newGender'), val: gender }, { el: $('newBirthday'), val: birthday },
-        { el: $('newGuardian'), val: guardian }, { el: $('newContact'), val: contact },
-        { el: $('newAddress'), val: address }
-      ];
-      checks.forEach(function (c) {
-        if (!c.val) { c.el.closest('.form-group').classList.add('has-error'); valid = false; }
+        }
       });
 
-      if (!valid) { toast('Please fill in all required fields.', 'error'); return; }
+      $('downloadQRBtn').addEventListener('click', function () {
+        var img = $('qrImage');
+        if (!img.src) { toast('QR not ready.', 'error'); return; }
+        var link = document.createElement('a');
+        link.download = 'qr-' + currentQR.name.replace(/\s+/g, '-').toLowerCase() + '.png';
+        link.href = img.src;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast('QR code downloaded!');
+      });
 
-      try {
+      // ================================================
+      //  ADD PATIENT
+      // ================================================
+      $('addPatientBtn').addEventListener('click', function () {
+        $('addPatientForm').reset();
+        $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
+        $('errId').style.display = 'none';
+        $('newAvatarPreview').style.display = 'none';
+        openModal('addPatientModal');
+      });
+
+      var avatarData = '';
+
+      $('newAvatarFile').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) { avatarData = ''; $('newAvatarPreview').style.display = 'none'; return; }
+
+        if (file.size > 5 * 1024 * 1024) {
+          toast('Photo must be under 5 MB.', 'error');
+          e.target.value = '';
+          return;
+        }
+
+        var img = new Image();
+        img.onload = function () {
+          var canvas = document.createElement('canvas');
+          var MAX = 300;
+          var w = img.width;
+          var h = img.height;
+          if (w > h) {
+            if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+          } else {
+            if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          avatarData = canvas.toDataURL('image/jpeg', 0.8);
+          $('newAvatarImg').src = avatarData;
+          $('newAvatarPreview').style.display = 'block';
+        };
+        img.src = URL.createObjectURL(file);
+        e.target.value = '';
+      });
+
+      $('saveNewPatientBtn').addEventListener('click', async function () {
+        $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
+        $('errId').style.display = 'none';
+
+        var newId = $('newPatientId').value.trim();
+        var name = $('newName').value.trim();
+        var age = $('newAge').value.trim();
+        var gender = $('newGender').value;
+        var birthday = $('newBirthday').value;
+        var guardian = $('newGuardian').value.trim();
+        var contact = $('newContact').value.trim();
+        var address = $('newAddress').value.trim();
+
+        var valid = true;
+
+        if (!newId) {
+          $('newPatientId').closest('.form-group').classList.add('has-error');
+          $('errId').style.display = 'block';
+          $('errId').textContent = 'Patient ID is required.';
+          valid = false;
+        } else if (!/^[a-zA-Z0-9\-]+$/.test(newId)) {
+          $('newPatientId').closest('.form-group').classList.add('has-error');
+          $('errId').style.display = 'block';
+          $('errId').textContent = 'Use only letters, numbers, and dashes.';
+          valid = false;
+        } else if (firebasePatients.some(function (p) { return p.id === newId; })) {
+          $('newPatientId').closest('.form-group').classList.add('has-error');
+          $('errId').style.display = 'block';
+          $('errId').textContent = 'This Patient ID already exists!';
+          valid = false;
+        }
+
+        var checks = [
+          { el: $('newName'), val: name }, { el: $('newAge'), val: age },
+          { el: $('newGender'), val: gender }, { el: $('newBirthday'), val: birthday },
+          { el: $('newGuardian'), val: guardian }, { el: $('newContact'), val: contact },
+          { el: $('newAddress'), val: address }
+        ];
+        checks.forEach(function (c) {
+          if (!c.val) { c.el.closest('.form-group').classList.add('has-error'); valid = false; }
+        });
+
+        if (!valid) { toast('Please fill in all required fields.', 'error'); return; }
+
+        var saveBtn = this;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
         var patientData = {
           id: newId, name: name, age: age, gender: gender,
           birthday: birthday, guardian: guardian, contact: contact,
           address: address, avatar: avatarData || ''
         };
-        localStorage.setItem('nep_patient_' + newId, JSON.stringify(patientData));
-        localStorage.setItem('nep_records_' + newId, JSON.stringify([]));
-        localStorage.setItem('nep_files_' + newId, JSON.stringify([]));
 
-        var list = getPatientList();
-        list.push({ id: newId, name: name });
-        savePatientList(list);
-      } catch (e) {
-        toast('Error saving patient.', 'error');
-        return;
+        await firebaseAddPatient(patientData);
+
+        try {
+          localStorage.setItem('nep_patient_' + newId, JSON.stringify(patientData));
+          localStorage.setItem('nep_records_' + newId, JSON.stringify([]));
+          localStorage.setItem('nep_files_' + newId, JSON.stringify([]));
+        } catch (e) {}
+
+        avatarData = '';
+        renderPatientList();
+        closeModal('addPatientModal');
+        toast('Patient "' + name + '" added and synced!');
+
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Patient';
+      });
+
+      // ================================================
+      //  DELETE PATIENT
+      // ================================================
+      var pendingDeleteId = '';
+
+      function confirmDelete(patientId, patientName) {
+        pendingDeleteId = patientId;
+        $('deletePatientMsg').innerHTML =
+          'Delete <strong>' + esc(patientName) + '</strong> permanently?<br /><br />' +
+          'All records and files will be removed. <strong>Cannot be undone.</strong>';
+        openModal('deletePatientModal');
       }
 
-      avatarData = '';
+      $('confirmDeletePatientBtn').addEventListener('click', async function () {
+        if (!pendingDeleteId) return;
+
+        var deleteBtn = this;
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+        await firebaseDeletePatient(pendingDeleteId);
+
+        try {
+          localStorage.removeItem('nep_patient_' + pendingDeleteId);
+          localStorage.removeItem('nep_records_' + pendingDeleteId);
+          localStorage.removeItem('nep_files_' + pendingDeleteId);
+        } catch (e) {}
+
+        renderPatientList();
+        closeModal('deletePatientModal');
+        toast('Patient deleted.', 'info');
+        pendingDeleteId = '';
+
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete Permanently';
+      });
+
+      // ================================================
+      //  CLEAR ERRORS ON TYPING
+      // ================================================
+      document.addEventListener('input', function (e) {
+        var group = e.target.closest('.form-group.has-error');
+        if (group) {
+          group.classList.remove('has-error');
+          var err = group.querySelector('.err');
+          if (err) err.style.display = 'none';
+        }
+      });
+
+      // ================================================
+      //  INIT
+      // ================================================
       renderPatientList();
-      closeModal('addPatientModal');
-      toast('Patient "' + name + '" added successfully!');
+      startFirebaseListeners();
+
+      console.log('%c ADMIN %c Firebase Sync: ON', 'background:#1a3a5c;color:#fff;padding:4px 10px;border-radius:4px 0 0 4px;font-weight:700;', 'background:#ea4335;color:#fff;padding:4px 10px;border-radius:0 4px 4px 0;');
+
+    })();
+
+    // Auto-refresh when returning to this page (fallback)
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) location.reload();
     });
-
-    // ================================================
-    //  DELETE PATIENT
-    // ================================================
-    var pendingDeleteId = '';
-
-    function confirmDelete(patientId, patientName) {
-      pendingDeleteId = patientId;
-      $('deletePatientMsg').innerHTML =
-        'Delete <strong>' + esc(patientName) + '</strong> permanently?<br><br>' +
-        'All records and files will be removed. <strong>Cannot be undone.</strong>';
-      openModal('deletePatientModal');
-    }
-
-    $('confirmDeletePatientBtn').addEventListener('click', function () {
-      if (!pendingDeleteId) return;
-      try {
-        localStorage.removeItem('nep_patient_' + pendingDeleteId);
-        localStorage.removeItem('nep_records_' + pendingDeleteId);
-        localStorage.removeItem('nep_files_' + pendingDeleteId);
-        savePatientList(getPatientList().filter(function (p) { return p.id !== pendingDeleteId; }));
-      } catch (e) { toast('Error.', 'error'); return; }
-      renderPatientList();
-      closeModal('deletePatientModal');
-      toast('Patient deleted.', 'info');
-      pendingDeleteId = '';
-    });
-
-    // ================================================
-    //  CLEAR ERRORS ON TYPING
-    // ================================================
-    document.addEventListener('input', function (e) {
-      var group = e.target.closest('.form-group.has-error');
-      if (group) {
-        group.classList.remove('has-error');
-        var err = group.querySelector('.err');
-        if (err) err.style.display = 'none';
-      }
-    });
-
-    // ================================================
-    //  INIT
-    // ================================================
-    renderPatientList();
-    console.log('%c ADMIN %c Ready', 'background:#1a3a5c;color:#fff;padding:4px 10px;border-radius:4px 0 0 4px;font-weight:700;', 'background:#2e86de;color:#fff;padding:4px 10px;border-radius:0 4px 4px 0;');
-
-  })();
-
-  // Auto-refresh when returning to this page
-  window.addEventListener('pageshow', function(e) {
-    if (e.persisted) location.reload();
-  });
-  document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) location.reload();
-  });
-
   </script>
+
+  <!-- QR Scanner (loaded AFTER the module script, outside of it) -->
+  <script src="qr-scanner.js" defer></script>
 
 </body>
 </html>

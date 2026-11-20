@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" type="image/png" href="logo.png" />
 </head>
 <body>
 
@@ -22,7 +23,7 @@
         <i class="fas fa-arrow-left"></i>
       </a>
       <div class="brand">
-        <div class="brand-icon"><i class="fas fa-child"></i></div>
+        <img src="logo.png" alt="New Era Pediatric Logo" class="brand-logo" />
         <div>
           <h1 class="brand-name">NEW ERA PEDIATRIC</h1>
           <p class="brand-sub">Patient Medical Records</p>
@@ -171,7 +172,7 @@
     <div class="drop-zone" id="dropZone">
       <i class="fas fa-cloud-upload-alt"></i>
       <p>Drag &amp; drop files here or click to browse</p>
-      <span class="drop-hint">Supports images, PDFs, documents — max 5 MB each</span>
+      <span class="drop-hint">Photos of any size (auto-compressed) — PDFs/documents max 700 KB</span>
     </div>
     <input type="file" id="fileInput" multiple hidden />
 
@@ -210,11 +211,11 @@
             </div>
           </div>
           <div style="margin-top:12px;">
-            <button type="button" class="btn btn-outline btn-sm" id="choosePhotoBtn"><i class="fas fa-camera"></i> Choose Photo</button>
+            <label class="btn btn-outline btn-sm" for="editAvatarFile" style="cursor:pointer;"><i class="fas fa-camera"></i> Choose Photo</label>
             <button type="button" class="btn btn-sm btn-danger" id="removePhotoBtn" style="margin-left:6px;"><i class="fas fa-times"></i> Remove</button>
           </div>
-          <input type="file" id="editAvatarFile" accept="image/*" hidden />
-          <div style="font-size:.75rem;color:#8e99aa;margin-top:8px;">Max 2 MB. JPG, PNG supported.</div>
+          <input type="file" id="editAvatarFile" accept="image/*" style="display:none;" />
+          <div style="font-size:.75rem;color:#8e99aa;margin-top:8px;">Max 10 MB. JPG, PNG supported.</div>
         </div>
 
         <div class="form-row">
@@ -375,6 +376,8 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<!-- ===================== SCRIPTS ===================== -->
+<script type="module" src="script.js"></script>
+
 </body>
 </html>
