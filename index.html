@@ -376,6 +376,37 @@
 </div>
 
 <!-- ===================== SCRIPTS ===================== -->
+
+<!-- ===================== MODAL: AVATAR EDITOR ===================== -->
+<div class="modal-overlay" id="avatarEditorModal">
+  <div class="modal modal-small">
+    <div class="modal-header">
+      <h3><i class="fas fa-crop"></i> Adjust Profile Photo</h3>
+      <button class="modal-close" data-close="avatarEditorModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" style="text-align:center;">
+      <div id="avatarEditArea" style="width:220px;height:220px;border-radius:50%;overflow:hidden;margin:0 auto 18px;position:relative;background:#e3edfa;border:3px solid #2e86de;cursor:grab;touch-action:none;">
+        <img id="avatarEditImg" src="" alt="" draggable="false" style="position:absolute;top:0;left:0;user-select:none;-webkit-user-drag:none;pointer-events:none;transform-origin:top left;" />
+      </div>
+      <div style="max-width:280px;margin:0 auto 10px;">
+        <div style="display:flex;justify-content:space-between;font-size:.78rem;font-weight:600;color:#4b5563;margin-bottom:4px;">
+          <span><i class="fas fa-search-minus"></i> Zoom</span>
+          <span id="avatarZoomValue">100%</span>
+          <span>Zoom <i class="fas fa-search-plus"></i></span>
+        </div>
+        <input type="range" id="avatarZoomSlider" min="1" max="3" step="0.05" value="1" style="width:100%;" />
+      </div>
+      <div style="font-size:.78rem;color:#8e99aa;">
+        <i class="fas fa-arrows-alt"></i> Drag to reposition &bull; Use slider to zoom
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close="avatarEditorModal"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn btn-primary" id="avatarEditorSave"><i class="fas fa-save"></i> Save Photo</button>
+    </div>
+  </div>
+</div>
+
 <script type="module" src="script.js"></script>
 
 </body>

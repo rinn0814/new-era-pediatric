@@ -731,37 +731,130 @@ const db = getFirestore(firebaseApp);
     toast('Photo removed.', 'info');
   });
 
-  // ================================================
-  //  AVATAR CLICK-TO-EDIT (click profile picture to change)
+    // ================================================
+  //  AVATAR CLICK-TO-EDIT (click profile picture to adjust)
   // ================================================
   var avatarClickInput = $('avatarClickInput');
+  var avatarEditImg = $('avatarEditImg');
+  var avatarEditArea = $('avatarEditArea');
+  var avatarZoomSlider = $('avatarZoomSlider');
+  var avatarZoomValue = $('avatarZoomValue');
+  var AREA_SIZE = 220;
+  var avEdit = { srcImg: null, baseW: 0, baseH: 0, scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, origX: 0, origY: 0 };
+
+  function avApplyTransform() {
+    if (!avatarEditImg) return;
+    avatarEditImg.style.transform = 'translate(' + avEdit.x + 'px,' + avEdit.y + 'px) scale(' + avEdit.scale + ')';
+  }
+
+  function avZoomTo(newScale) {
+    var ratio = newScale / avEdit.scale;
+    var c = AREA_SIZE / 2;
+    avEdit.x = c - (c - avEdit.x) * ratio;
+    avEdit.y = c - (c - avEdit.y) * ratio;
+    avEdit.scale = newScale;
+    if (avatarZoomValue) avatarZoomValue.textContent = Math.round(newScale * 100) + '%';
+    avApplyTransform();
+  }
+
   if (avatarClickInput) {
-    avatarClickInput.addEventListener('change', async function (e) {
+    avatarClickInput.addEventListener('change', function (e) {
       var file = e.target.files[0];
       e.target.value = '';
       if (!file) return;
-
       if (file.size > 10 * 1024 * 1024) {
         toast('Photo must be under 10 MB.', 'error');
         return;
       }
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        var img = new Image();
+        img.onload = function () {
+          avEdit.srcImg = img;
+          avEdit.scale = 1;
+          avEdit.x = 0;
+          avEdit.y = 0;
+          if (avatarZoomSlider) avatarZoomSlider.value = 1;
+          if (avatarZoomValue) avatarZoomValue.textContent = '100%';
 
-      var img = new Image();
-      img.onload = async function () {
-        var canvas = document.createElement('canvas');
-        var MAX = 300;
-        var w = img.width, h = img.height;
-        if (w > h) { if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; } }
-        else { if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; } }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        patient.avatar = canvas.toDataURL('image/jpeg', 0.8);
-        saveToLocalStorage();
-        await firebaseSavePatient();
-        renderPatient();
-        toast('Profile photo updated!');
+          var ratio = Math.max(AREA_SIZE / img.width, AREA_SIZE / img.height);
+          avEdit.baseW = img.width * ratio;
+          avEdit.baseH = img.height * ratio;
+          avatarEditImg.src = ev.target.result;
+          avatarEditImg.style.width = avEdit.baseW + 'px';
+          avatarEditImg.style.height = avEdit.baseH + 'px';
+          avEdit.x = (AREA_SIZE - avEdit.baseW) / 2;
+          avEdit.y = (AREA_SIZE - avEdit.baseH) / 2;
+          avApplyTransform();
+          openModal('avatarEditorModal');
+        };
+        img.src = ev.target.result;
       };
-      img.src = URL.createObjectURL(file);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Drag to reposition
+  if (avatarEditArea) {
+    function avDragStart(cx, cy) {
+      avEdit.dragging = true;
+      avEdit.startX = cx; avEdit.startY = cy;
+      avEdit.origX = avEdit.x; avEdit.origY = avEdit.y;
+    }
+    function avDragMove(cx, cy) {
+      if (!avEdit.dragging) return;
+      avEdit.x = avEdit.origX + (cx - avEdit.startX);
+      avEdit.y = avEdit.origY + (cy - avEdit.startY);
+      avApplyTransform();
+    }
+    function avDragEnd() { avEdit.dragging = false; }
+
+    avatarEditArea.addEventListener('mousedown', function (e) {
+      e.preventDefault(); avDragStart(e.clientX, e.clientY);
+    });
+    document.addEventListener('mousemove', function (e) {
+      avDragMove(e.clientX, e.clientY);
+    });
+    document.addEventListener('mouseup', avDragEnd);
+
+    avatarEditArea.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      var t = e.touches[0]; avDragStart(t.clientX, t.clientY);
+    }, { passive: false });
+    document.addEventListener('touchmove', function (e) {
+      if (avEdit.dragging) { var t = e.touches[0]; avDragMove(t.clientX, t.clientY); }
+    }, { passive: true });
+    document.addEventListener('touchend', avDragEnd);
+  }
+
+  // Zoom slider
+  if (avatarZoomSlider) {
+    avatarZoomSlider.addEventListener('input', function () {
+      avZoomTo(parseFloat(this.value));
+    });
+  }
+
+  // Save adjusted photo
+  var avatarEditorSaveBtn = $('avatarEditorSave');
+  if (avatarEditorSaveBtn) {
+    avatarEditorSaveBtn.addEventListener('click', async function () {
+      if (!avEdit.srcImg) return;
+      var canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 300;
+      var ctx = canvas.getContext('2d');
+      var outScale = 300 / AREA_SIZE;
+      ctx.scale(outScale, outScale);
+      ctx.translate(avEdit.x, avEdit.y);
+      ctx.scale(avEdit.scale, avEdit.scale);
+      ctx.drawImage(avEdit.srcImg, 0, 0, avEdit.baseW, avEdit.baseH);
+
+      patient.avatar = canvas.toDataURL('image/jpeg', 0.85);
+      saveToLocalStorage();
+      await firebaseSavePatient();
+      renderPatient();
+      closeModal('avatarEditorModal');
+      toast('Profile photo updated!');
     });
   }
 
