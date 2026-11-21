@@ -72,7 +72,6 @@
 
     document.body.insertAdjacentHTML('beforeend',
       '<div class="nep-fabs">' +
-        '<button type="button" class="nep-fab alt" id="nepQrBtn"><i class="fas fa-qrcode"></i> Patient QR</button>' +
         '<button type="button" class="nep-fab" id="nepScanBtn"><i class="fas fa-camera"></i> Scan QR</button>' +
       '</div>' +
 
@@ -121,7 +120,6 @@
   // ================================================
   function wireEvents() {
     document.getElementById('nepScanBtn').addEventListener('click', openScanner);
-    document.getElementById('nepQrBtn').addEventListener('click', function () { openQrManager(); });
     document.getElementById('nepQrPrint').addEventListener('click', printQr);
     document.getElementById('nepQrFile').addEventListener('change', onQrPhotoChosen);
     document.getElementById('nepQrSelect').addEventListener('change', function (e) {

@@ -403,6 +403,7 @@
             '</div>' +
             '<div class="patient-actions">' +
               '<a href="' + url + '" class="btn btn-sm btn-outline" target="_blank"><i class="fas fa-external-link-alt"></i> Open</a>' +
+              '<button class="btn btn-sm btn-info" data-action="qr" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-qrcode"></i> QR</button>' +
               '<button class="btn btn-sm btn-primary" data-action="copy" data-id="' + esc(p.id) + '"><i class="fas fa-copy"></i> Copy Link</button>' +
               '<button class="btn btn-sm btn-danger" data-action="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-trash"></i></button>' +
             '</div>';
