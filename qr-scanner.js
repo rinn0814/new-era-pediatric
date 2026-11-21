@@ -434,29 +434,6 @@
   // ================================================
   //  AUTO-ADD MINI QR BUTTONS TO PATIENT LINKS
   // ================================================
-  function autoAddQrButtons() {
-    document.querySelectorAll('a[href*="patient="]').forEach(function (a) {
-      if (a.nextElementSibling && a.nextElementSibling.classList.contains('nep-mini-qr')) return;
-
-      var pid = null;
-      try {
-        pid = new URL(a.href, window.location.origin).searchParams.get('patient');
-      } catch (e) {}
-      if (!pid) return;
-
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'nep-mini-qr';
-      b.title = 'Show QR';
-      b.innerHTML = '<i class="fas fa-qrcode"></i>';
-      b.onclick = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        openQrManager(pid);
-      };
-      a.parentNode.insertBefore(b, a.nextSibling);
-    });
-  }
 
   // ================================================
   //  PUBLIC API
@@ -470,8 +447,7 @@
     if (!isAdminPage()) return;
     buildUI();
     wireEvents();
-    autoAddQrButtons();
-    setInterval(autoAddQrButtons, 2000);
+   // autoAddQrButtons removed
   }
 
   if (document.readyState === 'loading') {

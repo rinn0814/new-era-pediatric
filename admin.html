@@ -378,9 +378,7 @@
           } catch (e) { list = []; }
         }
 
-        if (list.length === 0) {
-          list = [{ id: 'demo-patient-001', name: 'Sophia Marie Dela Cruz', age: '5 years old', gender: 'Female', birthday: '2020-03-15', guardian: 'Maria Dela Cruz', contact: '+63 917 123 4567', address: '123 Sampaguita St., Barangay San Jose, Quezon City, Metro Manila', avatar: '' }];
-        }
+        // demo patient removed — only real Firebase patients
 
         container.innerHTML = '';
         emptyMsg.style.display = list.length === 0 ? 'block' : 'none';
@@ -405,7 +403,6 @@
             '</div>' +
             '<div class="patient-actions">' +
               '<a href="' + url + '" class="btn btn-sm btn-outline" target="_blank"><i class="fas fa-external-link-alt"></i> Open</a>' +
-              '<button class="btn btn-sm btn-info" data-action="qr" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-qrcode"></i> QR</button>' +
               '<button class="btn btn-sm btn-primary" data-action="copy" data-id="' + esc(p.id) + '"><i class="fas fa-copy"></i> Copy Link</button>' +
               '<button class="btn btn-sm btn-danger" data-action="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-trash"></i></button>' +
             '</div>';
