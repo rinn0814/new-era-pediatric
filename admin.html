@@ -1,1609 +1,844 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NEW ERA PEDIATRIC – Admin</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
---bg:#f4f7fb;--card:#fff;--ink:#0b1f3a;--ink2:#33415c;--muted:#7c8aa5;
---line:#e6ecf4;--primary:#0f2b5b;--accent:#1d4ed8;--green:#0f9d58;--red:#dc2626;--amber:#f59e0b;--blue:#2563eb;
---radius:16px;--shadow:0 2px 10px rgba(11,31,58,.06);
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink2);}
-button{font-family:inherit;}
-.topbar{background:linear-gradient(135deg,#0f2b5b 0%,#1d4ed8 100%);color:#fff;padding:18px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-.brand{display:flex;align-items:center;gap:14px;}
-.brand-logo{height:52px;width:52px;object-fit:cover;border-radius:12px;background:#fff;padding:4px;}
-.brand h1{font-size:1.25rem;font-weight:700;letter-spacing:.3px;}
-.brand p{font-size:.75rem;opacity:.85;}
-.topbar .spacer{flex:1;}
-.btn{border:none;border-radius:10px;padding:11px 18px;font-size:.82rem;font-weight:600;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:8px;}
-.btn-outline{background:transparent;border:1.5px solid rgba(255,255,255,.45);color:#fff;}
-.btn-outline:hover{background:rgba(255,255,255,.12);}
-.btn-solid{background:#fff;color:#0f2b5b;}
-.btn-solid:hover{opacity:.9;}
-.btn-primary{background:var(--accent);color:#fff;}
-.btn-primary:hover{opacity:.9;}
-.btn-green{background:var(--green);color:#fff;}
-.btn-green:hover{opacity:.9;}
-.btn-red{background:var(--red);color:#fff;}
-.btn-red:hover{opacity:.9;}
-.btn-ghost{background:#eef2ff;color:#1d4ed8;border:1px solid #dbeafe;}
-.btn-ghost:hover{background:#dbeafe;}
-.btn-sm{padding:7px 12px;font-size:.72rem;border-radius:8px;}
-.layout{display:flex;min-height:calc(100vh - 88px);}
-.sidebar{width:220px;background:#fff;border-right:1px solid var(--line);padding:20px 12px;}
-.nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;cursor:pointer;font-size:.82rem;font-weight:500;color:var(--ink2);margin-bottom:4px;transition:.15s;}
-.nav-item:hover{background:#eef2ff;color:var(--accent);}
-.nav-item.active{background:var(--accent);color:#fff;}
-.nav-item i{width:18px;text-align:center;}
-.main{flex:1;padding:22px 28px;}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:22px;}
-.card{background:var(--card);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);border:1px solid var(--line);}
-.stat-card{display:flex;align-items:center;gap:16px;}
-.stat-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;color:#fff;}
-.stat-card .val{font-size:1.65rem;font-weight:700;color:var(--ink);}
-.stat-card .lbl{font-size:.75rem;color:var(--muted);font-weight:500;}
-.section-title{font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-.table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:.82rem;}
-thead th{text-align:left;padding:12px 14px;background:#f1f5f9;color:var(--ink2);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--line);}
-tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;}
-tbody tr:hover{background:#f8fafc;}
-.avatar-sm{width:36px;height:36px;border-radius:10px;object-fit:cover;background:#e2e8f0;}
-.badge{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:600;padding:4px 10px;border-radius:20px;}
-.badge-green{background:#dcfce7;color:#166534;}
-.badge-blue{background:#dbeafe;color:#1e40af;}
-.badge-amber{background:#fef3c7;color:#92400e;}
-.badge-gray{background:#f1f5f9;color:#475569;}
-.badge-red{background:#fee2e2;color:#991b1b;}
-.input{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);font-size:.82rem;font-family:inherit;outline:none;transition:.15s;background:#f8fafc;}
-.input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(29,78,216,.1);}
-select.input{cursor:pointer;}
-textarea.input{resize:vertical;}
-label{display:block;font-size:.72rem;font-weight:600;color:var(--ink2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
-.form-group{margin-bottom:14px;}
-.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(11,31,58,.55);backdrop-filter:blur(4px);z-index:1000;overflow-y:auto;padding:30px 16px;}
-.modal-backdrop.open{display:block;}
-.modal{background:#fff;border-radius:20px;max-width:640px;margin:0 auto;box-shadow:0 20px 60px rgba(11,31,58,.25);overflow:hidden;}
-.modal-lg{max-width:820px;}
-.modal-head{padding:20px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.modal-head h2{font-size:1.15rem;color:var(--ink);font-weight:700;}
-.modal-body{padding:22px 26px;}
-.modal-foot{padding:16px 26px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
-.close-btn{width:34px;height:34px;border-radius:10px;background:#f1f5f9;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink2);}
-.close-btn:hover{background:#e2e8f0;}
-/* —— Patient detail —— */
-.patient-banner{background:linear-gradient(135deg,#0f2b5b 0%,#1d4ed8 100%);color:#fff;padding:22px 26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
-.patient-avatar{width:72px;height:72px;border-radius:18px;object-fit:cover;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.35);}
-.patient-banner h2{font-size:1.25rem;font-weight:700;}
-.patient-banner .meta{font-size:.78rem;opacity:.88;display:flex;gap:16px;flex-wrap:wrap;margin-top:4px;}
-.tabs{display:flex;gap:6px;background:#fff;padding:6px;border-radius:12px;margin-bottom:18px;overflow-x:auto;border:1px solid var(--line);}
-.tab-btn{border:none;background:transparent;padding:10px 18px;border-radius:8px;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:.15s;display:flex;align-items:center;gap:7px;}
-.tab-btn:hover{background:#f1f5f9;color:var(--ink);}
-.tab-btn.active{background:var(--accent);color:#fff;}
-.tab-content{display:none;}
-.tab-content.active{display:block;}
-/* —— Files —— */
-.file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
-.file-card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:.18s;}
-.file-card:hover{box-shadow:0 6px 20px rgba(11,31,58,.1);transform:translateY(-2px);}
-.file-card img{width:100%;height:140px;object-fit:cover;cursor:pointer;}
-.file-card .fi{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;background:#f1f5f9;}
-.file-card .fi.pdf{color:#dc2626;}
-.file-card .fi.doc{color:#2563eb;}
-.file-card .fi.xls{color:#0f9d58;}
-.file-card .fi.file{color:#7c8aa5;}
-.file-info{padding:10px 12px;}
-.file-info .fname{font-size:.74rem;font-weight:600;color:var(--ink);word-break:break-all;line-height:1.3;}
-.file-info .fdate{font-size:.66rem;color:var(--muted);margin-top:3px;}
-.file-actions{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;}
-.file-tag{display:inline-block;font-size:.62rem;font-weight:600;padding:3px 8px;border-radius:6px;margin-top:5px;}
-.tag-lab{background:#dbeafe;color:#1e40af;}
-.tag-presc{background:#dcfce7;color:#166534;}
-.tag-xray{background:#fef3c7;color:#92400e;}
-.tag-ultrasound{background:#f3e8ff;color:#6b21a8;}
-.tag-other{background:#f1f5f9;color:#475569;}
-/* —— Image lightbox —— */
-.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:3000;align-items:center;justify-content:center;flex-direction:column;padding:20px;}
-.lightbox.open{display:flex;}
-.lightbox img{max-width:92vw;max-height:78vh;border-radius:12px;object-fit:contain;}
-.lb-bar{display:flex;gap:10px;align-items:center;margin-top:18px;flex-wrap:wrap;justify-content:center;}
-.lb-fname{color:#fff;font-size:.82rem;font-weight:500;text-align:center;margin-top:10px;}
-.lb-nav{width:42px;height:42px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:1.1rem;cursor:pointer;}
-.lb-nav:hover{background:rgba(255,255,255,.3);}
-/* —— Toast —— */
-.toast-wrap{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:10px;}
-.toast{padding:13px 20px;border-radius:12px;color:#fff;font-size:.82rem;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 8px 28px rgba(11,31,58,.18);animation:slideIn .3s;max-width:340px;}
-@keyframes slideIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
-.toast-green{background:var(--green);}
-.toast-red{background:var(--red);}
-.toast-blue{background:var(--blue);}
-/* —— QR —— */
-.qr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
-.qr-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;}
-.qr-card img{width:110px;height:110px;margin-bottom:10px;border:1px solid var(--line);border-radius:8px;}
-.qr-card .nm{font-size:.75rem;font-weight:600;color:var(--ink);word-break:break-all;}
-.qr-card .id{font-size:.66rem;color:var(--muted);margin:3px 0 10px;}
-/* —— Scanner —— */
-.scanner-wrap{width:100%;max-width:480px;margin:0 auto;border-radius:12px;overflow:hidden;border:2px solid var(--accent);}
-.scan-fab{position:fixed;right:28px;bottom:28px;z-index:500;background:var(--accent);color:#fff;padding:14px 22px;border-radius:50px;font-size:.85rem;font-weight:600;box-shadow:0 10px 30px rgba(29,78,216,.35);cursor:pointer;display:flex;align-items:center;gap:10px;}
-.scan-fab:hover{transform:translateY(-2px);}
-/* —— Empty —— */
-.empty{text-align:center;padding:40px 20px;color:var(--muted);}
-.empty i{font-size:2.2rem;opacity:.4;margin-bottom:12px;display:block;}
-.empty p{font-size:.82rem;}
-/* —— Notes —— */
-.note-item{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
-.note-item .date{font-size:.68rem;color:var(--muted);margin-bottom:4px;}
-.note-item .text{font-size:.82rem;color:var(--ink2);line-height:1.55;}
-/* —— Skeleton —— */
-.skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:10px;}
-@keyframes shimmer{from{background-position:200% 0;}to{background-position:-200% 0;}}
-@media(max-width:768px){
-.layout{flex-direction:column;}
-.sidebar{width:100%;display:flex;overflow-x:auto;padding:10px;gap:6px;border-right:none;border-bottom:1px solid var(--line);}
-.nav-item{white-space:nowrap;padding:10px 14px;}
-.main{padding:16px 14px;}
-.form-row,.form-row3{grid-template-columns:1fr;}
-.modal{border-radius:16px;}
-.topbar{padding:14px 16px;}
-.brand-logo{height:42px;width:42px;}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – Patient Management | NEW ERA PEDIATRIC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f7f8fc; color: #1e293b; min-height: 100vh; }
+
+    .navbar { background: linear-gradient(135deg, #1a3a5c, #1b5fae); padding: 0 24px; box-shadow: 0 3px 16px rgba(26,58,92,.35); position: sticky; top: 0; z-index: 100; }
+    .navbar-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 70px; }
+    .brand { display: flex; align-items: center; gap: 12px; color: #fff; }
+    .brand-logo { height: 44px; width: 44px; object-fit: contain; border-radius: 50%; background: rgba(255,255,255,.15); padding: 3px; }
+    .brand-name { font-size: 1.15rem; font-weight: 800; letter-spacing: .5px; }
+    .brand-sub { font-size: .68rem; color: rgba(255,255,255,.65); text-transform: uppercase; letter-spacing: 1px; }
+    .nav-link { background: rgba(255,255,255,.12); color: rgba(255,255,255,.9); padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: .85rem; font-weight: 500; border: 1px solid rgba(255,255,255,.18); transition: .25s; display: inline-flex; align-items: center; gap: 6px; }
+    .nav-link:hover { background: rgba(255,255,255,.22); color: #fff; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 30px 24px 60px; }
+
+    .section { background: #fff; border-radius: 14px; padding: 28px; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.07); border: 1px solid #eef0f6; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 2px solid #e3edfa; }
+    .section-header h2 { font-size: 1.3rem; font-weight: 700; color: #1a3a5c; display: flex; align-items: center; gap: 10px; }
+    .section-header h2 i { color: #2e86de; }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border: none; border-radius: 8px; font-family: inherit; font-size: .88rem; font-weight: 600; cursor: pointer; transition: .25s; text-decoration: none; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+    .btn-primary { background: #2e86de; color: #fff; }
+    .btn-success { background: #22c55e; color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-outline { background: transparent; color: #2e86de; border: 2px solid #2e86de; }
+    .btn-outline:hover { background: #2e86de; color: #fff; }
+    .btn-sm { padding: 6px 14px; font-size: .78rem; border-radius: 6px; }
+    .btn-info { background: #0ea5e9; color: #fff; }
+
+    .patient-card { display: flex; align-items: center; justify-content: space-between; background: #f7f8fc; border: 1px solid #eef0f6; border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; transition: .25s; flex-wrap: wrap; gap: 12px; }
+    .patient-card:hover { background: #e3edfa; border-color: #2e86de; }
+    .patient-info { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .patient-avatar-sm { width: 46px; height: 46px; border-radius: 50%; background: #e3edfa; display: flex; align-items: center; justify-content: center; color: #2e86de; font-size: 1.2rem; flex-shrink: 0; overflow: hidden; }
+    .patient-avatar-sm img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .patient-name { font-weight: 700; color: #1a3a5c; font-size: 1.05rem; }
+    .patient-id { font-size: .78rem; color: #8e99aa; }
+    .patient-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { margin-bottom: 0; }
+    .form-group.full { grid-column: 1 / -1; margin-bottom: 16px; }
+    .form-group label { display: block; font-size: .83rem; font-weight: 600; color: #4b5563; margin-bottom: 6px; }
+    .form-group input, .form-group select { width: 100%; padding: 11px 14px; border: 2px solid #dde1ea; border-radius: 8px; font-family: inherit; font-size: .92rem; transition: .25s; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #2e86de; box-shadow: 0 0 0 3px rgba(46,134,222,.13); }
+    .form-group .err { color: #ef4444; font-size: .76rem; margin-top: 4px; display: none; }
+    .form-group.has-error input, .form-group.has-error select { border-color: #ef4444; }
+    .form-group.has-error .err { display: block; }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 500; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 14px; width: 100%; max-width: 620px; max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,.16); animation: slideUp .3s ease; }
+    .modal-small { max-width: 460px; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 26px; border-bottom: 1px solid #eef0f6; background: #f7f8fc; border-radius: 14px 14px 0 0; flex-shrink: 0; }
+    .modal-header h3 { font-size: 1.12rem; font-weight: 700; color: #1a3a5c; display: flex; align-items: center; gap: 10px; }
+    .modal-header h3 i { color: #2e86de; }
+    .modal-close { width: 38px; height: 38px; border: none; background: #dde1ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #4b5563; transition: .25s; }
+    .modal-close:hover { background: #ef4444; color: #fff; transform: rotate(90deg); }
+    .modal-body { padding: 24px 26px; overflow-y: auto; flex: 1; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 18px 26px; border-top: 1px solid #eef0f6; background: #f7f8fc; border-radius: 0 0 14px 14px; flex-shrink: 0; flex-wrap: wrap; }
+
+    .qr-area { text-align: center; padding: 10px 0; }
+    .qr-area img { border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.1); margin-bottom: 14px; max-width: 100%; }
+    .qr-url { background: #f7f8fc; padding: 10px 16px; border-radius: 8px; font-size: .82rem; color: #1b5fae; word-break: break-all; margin-bottom: 16px; text-align: left; line-height: 1.6; }
+    .qr-loading { text-align: center; padding: 30px; color: #8e99aa; font-size: .95rem; }
+    .qr-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+    .toast { position: fixed; bottom: 32px; right: 32px; padding: 14px 28px; border-radius: 8px; color: #fff; font-weight: 600; font-size: .92rem; z-index: 9000; box-shadow: 0 10px 40px rgba(0,0,0,.16); opacity: 0; transform: translateY(20px); transition: .4s; pointer-events: none; display: flex; align-items: center; gap: 10px; max-width: 400px; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #22c55e; }
+    .toast.error { background: #ef4444; }
+    .toast.info { background: #2e86de; }
+
+    .empty-msg { text-align: center; padding: 40px; color: #8e99aa; }
+    .empty-msg i { font-size: 3rem; margin-bottom: 12px; opacity: .45; }
+    .empty-msg p { font-size: 1.05rem; font-weight: 500; }
+
+    .footer { text-align: center; padding: 24px; color: #8e99aa; font-size: .82rem; border-top: 1px solid #eef0f6; background: #fff; }
+
+    .sync-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: .75rem; font-weight: 600; background: #dcfce7; color: #166534; }
+    .sync-badge.syncing { background: #fef3c7; color: #92400e; }
+
+    @media (max-width: 768px) {
+      .navbar-inner { flex-direction: column; height: auto; padding: 14px 0; gap: 10px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .form-group { margin-bottom: 16px; }
+      .patient-card { flex-direction: column; align-items: flex-start; }
+      .container { padding: 18px 14px 40px; }
+      .section { padding: 20px; }
+      .qr-buttons { flex-direction: column; }
+      .qr-buttons .btn { width: 100%; justify-content: center; }
+      .section-header { flex-direction: column; align-items: stretch; text-align: center; }
+      .section-header h2 { justify-content: center; }
+      .patient-actions { width: 100%; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="toast-wrap" id="toastWrap"></div>
-
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="brand">
-    <img src="logo.png" alt="Logo" class="brand-logo" />
-    <div>
-      <h1>NEW ERA PEDIATRIC</h1>
-      <p>Admin Dashboard</p>
-    </div>
-  </div>
-  <div class="spacer"></div>
-  <button class="btn btn-outline" id="btnExport"><i class="fas fa-file-export"></i> Export</button>
-  <button class="btn btn-solid" id="btnAddPatient"><i class="fas fa-user-plus"></i> Add Patient</button>
-</div>
-
-<div class="layout">
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</div>
-    <div class="nav-item" data-page="patients"><i class="fas fa-users"></i> Patients</div>
-    <div class="nav-item" data-page="files"><i class="fas fa-folder-open"></i> All Files</div>
-    <div class="nav-item" data-page="qrcodes"><i class="fas fa-qrcode"></i> QR Codes</div>
-    <div class="nav-item" data-page="scanner"><i class="fas fa-camera"></i> QR Scanner</div>
-    <div class="nav-item" data-page="settings"><i class="fas fa-cog"></i> Settings</div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main" id="mainContent">
-
-    <!-- DASHBOARD -->
-    <div id="page-dashboard">
-      <div class="cards">
-        <div class="card stat-card">
-          <div class="stat-icon" style="background:#2563eb"><i class="fas fa-users"></i></div>
-          <div><div class="val" id="statPatients">0</div><div class="lbl">Total Patients</div></div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-icon" style="background:#0f9d58"><i class="fas fa-folder-open"></i></div>
-          <div><div class="val" id="statFiles">0</div><div class="lbl">Files Uploaded</div></div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-icon" style="background:#f59e0b"><i class="fas fa-notes-medical"></i></div>
-          <div><div class="val" id="statRecords">0</div><div class="lbl">Medical Records</div></div>
-        </div>
-        <div class="card stat-card">
-          <div class="stat-icon" style="background:#7c3aed"><i class="fas fa-calendar-day"></i></div>
-          <div><div class="val" id="statToday">0</div><div class="lbl">Added Today</div></div>
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand">
+        <img src="logo.png" alt="New Era Pediatric Logo" class="brand-logo" />
+        <div>
+          <div class="brand-name">NEW ERA PEDIATRIC</div>
+          <div class="brand-sub">Admin – Patient Management</div>
         </div>
       </div>
-      <div class="section-title"><i class="fas fa-clock-rotate-left"></i> Recent Activity</div>
-      <div class="card" style="padding:10px 16px;">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Patient</th><th>Action</th><th>Date</th></tr></thead>
-            <tbody id="recentActivity"><tr><td colspan="3"><div class="empty"><i class="fas fa-inbox"></i><p>No recent activity</p></div></td></tr></tbody>
-          </table>
-        </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="sync-badge syncing" id="syncBadge"><i class="fas fa-spinner fa-spin"></i> Connecting...</div>
+        <a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Patient Records</a>
       </div>
     </div>
+  </header>
 
-    <!-- PATIENTS -->
-    <div id="page-patients" style="display:none;">
-      <div class="section-title"><i class="fas fa-users"></i> Patient List</div>
-      <div class="card" style="margin-bottom:16px;padding:16px;">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <input class="input" style="flex:1;min-width:200px;" id="searchPatients" placeholder="Search by name or ID..." />
-          <select class="input" style="width:180px;" id="filterAge">
-            <option value="">All Ages</option>
-            <option value="0-2">0 – 2 years</option>
-            <option value="3-5">3 – 5 years</option>
-            <option value="6-12">6 – 12 years</option>
-            <option value="13-18">13 – 18 years</option>
-          </select>
-          <button class="btn btn-primary" onclick="openAddPatient()"><i class="fas fa-plus"></i> New Patient</button>
-        </div>
+  <main class="container">
+    <section class="section">
+      <div class="section-header">
+        <h2><i class="fas fa-users"></i> All Patients</h2>
+        <button class="btn btn-success" id="addPatientBtn"><i class="fas fa-plus-circle"></i> Add New Patient</button>
       </div>
-      <div class="card" style="padding:10px 16px;">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Avatar</th><th>ID</th><th>Name</th><th>Age</th><th>Sex</th><th>Guardian</th><th>Files</th><th>Actions</th></tr></thead>
-            <tbody id="patientTable"></tbody>
-          </table>
-        </div>
+      <div id="patientList"></div>
+      <div class="empty-msg" id="emptyPatients" style="display:none;">
+        <i class="fas fa-user-slash"></i>
+        <p>No patients found.</p>
       </div>
-    </div>
+    </section>
+  </main>
 
-    <!-- ALL FILES -->
-    <div id="page-files" style="display:none;">
-      <div class="section-title"><i class="fas fa-folder-open"></i> All Uploaded Files</div>
-      <div class="card" style="margin-bottom:16px;padding:16px;">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <input class="input" style="flex:1;min-width:180px;" id="searchFiles" placeholder="Search files..." />
-          <select class="input" style="width:170px;" id="filterFileType">
-            <option value="">All Types</option>
-            <option value="image">Images</option>
-            <option value="pdf">PDF</option>
-            <option value="doc">Documents</option>
-          </select>
-          <button class="btn btn-ghost" onclick="loadAllFiles()"><i class="fas fa-refresh"></i> Refresh</button>
-        </div>
-      </div>
-      <div id="allFilesGrid" class="file-grid"></div>
-    </div>
+   <footer class="footer"><p>&copy; 2026 NEW ERA PEDIATRIC. All rights reserved.</p></footer>
 
-    <!-- QR CODES -->
-    <div id="page-qrcodes" style="display:none;">
-      <div class="section-title"><i class="fas fa-qrcode"></i> Patient QR Codes</div>
-      <div class="card" style="margin-bottom:16px;padding:16px;">
-        <button class="btn btn-green" onclick="generateAllQR()"><i class="fas fa-refresh"></i> Refresh QR Codes</button>
-        <button class="btn btn-primary" onclick="printAllQR()" style="margin-left:8px;"><i class="fas fa-print"></i> Print All</button>
-      </div>
-      <div id="qrGrid" class="qr-grid"></div>
-    </div>
+  <!-- TOAST -->
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
 
-    <!-- SCANNER -->
-    <div id="page-scanner" style="display:none;">
-      <div class="section-title"><i class="fas fa-camera"></i> QR Scanner</div>
-      <div class="card" style="padding:20px;">
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;">Point your camera at a patient QR code to open their records instantly.</p>
-        <div id="qr-reader-container" class="scanner-wrap">
-          <div id="qr-reader" style="width:100%;min-height:300px;"></div>
-        </div>
-        <div style="text-align:center;margin-top:16px;">
-          <button class="btn btn-primary" id="btnStartScan" onclick="startQRScan()"><i class="fas fa-camera"></i> Start Camera</button>
-          <button class="btn btn-red" id="btnStopScan" onclick="stopQRScan()" style="display:none;"><i class="fas fa-stop"></i> Stop Camera</button>
-        </div>
-        <div id="scanResult" style="margin-top:18px;display:none;">
-          <div class="card" style="background:#f0fdf4;border:1px solid #bbf7d0;padding:18px;">
-            <div style="display:flex;align-items:center;gap:14px;">
-              <i class="fas fa-check-circle" style="font-size:1.8rem;color:#16a34a;"></i>
-              <div>
-                <div style="font-weight:700;color:#166534;font-size:.95rem;">QR Code Scanned!</div>
-                <div id="scanResultText" style="font-size:.82rem;color:#166534;margin-top:4px;"></div>
-              </div>
-              <button class="btn btn-green" id="btnOpenPatient" style="margin-left:auto;"><i class="fas fa-external-link-alt"></i> Open Records</button>
+  <!-- MODAL: ADD PATIENT -->
+  <div class="modal-overlay" id="addPatientModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-plus"></i> Add New Patient</h3>
+        <button class="modal-close" data-close="addPatientModal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="addPatientForm" autocomplete="off">
+          <div class="form-group full">
+            <label>Patient ID / Code *</label>
+            <input type="text" id="newPatientId" placeholder="e.g. patient-john-002" />
+            <div class="err" id="errId"></div>
+            <div style="font-size:.75rem;color:#8e99aa;margin-top:4px;">Use letters, numbers, and dashes only. This goes in the URL and QR code.</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="newName" />
+              <div class="err">Name is required.</div>
             </div>
+            <div class="form-group">
+              <label>Age *</label>
+              <input type="text" id="newAge" placeholder="e.g. 3 years old" />
+              <div class="err">Age is required.</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Gender *</label>
+              <select id="newGender">
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="err">Gender is required.</div>
+            </div>
+            <div class="form-group">
+              <label>Date of Birth *</label>
+              <input type="date" id="newBirthday" />
+              <div class="err">Birthday is required.</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Parent / Guardian *</label>
+              <input type="text" id="newGuardian" />
+              <div class="err">Guardian is required.</div>
+            </div>
+            <div class="form-group">
+              <label>Contact Number *</label>
+              <input type="tel" id="newContact" />
+              <div class="err">Contact is required.</div>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label>Complete Address *</label>
+            <input type="text" id="newAddress" />
+            <div class="err">Address is required.</div>
+          </div>
+          <div class="form-group full">
+            <label>Profile Picture <span style="font-weight:400;color:#8e99aa;">(optional)</span></label>
+            <input type="file" id="newAvatarFile" accept="image/*" style="padding:8px;" />
+            <div id="newAvatarPreview" style="margin-top:10px;display:none;">
+              <img id="newAvatarImg" src="" alt="Preview" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #e3edfa;" />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-close="addPatientModal"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn btn-success" id="saveNewPatientBtn"><i class="fas fa-save"></i> Save Patient</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: QR CODE -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal modal-small">
+      <div class="modal-header">
+        <h3><i class="fas fa-qrcode"></i> Patient QR Code</h3>
+        <button class="modal-close" data-close="qrModal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="qr-area">
+          <div id="qrLoading" class="qr-loading"><i class="fas fa-spinner fa-spin"></i> Generating QR code...</div>
+          <img id="qrImage" src="" alt="QR Code" style="display:none;" />
+          <div class="qr-url" id="qrUrlText"></div>
+          <div class="qr-buttons">
+            <button class="btn btn-info" id="copyLinkBtn"><i class="fas fa-copy"></i> Copy Link</button>
+            <button class="btn btn-success" id="downloadQRBtn" style="display:none;"><i class="fas fa-download"></i> Download QR</button>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- SETTINGS -->
-    <div id="page-settings" style="display:none;">
-      <div class="section-title"><i class="fas fa-cog"></i> Settings</div>
-      <div class="card" style="padding:22px;max-width:600px;">
-        <div class="form-group">
-          <label>Clinic Name</label>
-          <input class="input" id="setClinicName" value="NEW ERA PEDIATRIC" />
-        </div>
-        <div class="form-group">
-          <label>Footer Copyright</label>
-          <input class="input" id="setCopyright" value="© 2026 NEW ERA PEDIATRIC. All rights reserved." />
-        </div>
-        <div class="form-group">
-          <label>Contact Info</label>
-          <input class="input" id="setContact" placeholder="Phone / Email" />
-        </div>
-        <div class="form-group">
-          <label>Address</label>
-          <textarea class="input" id="setAddress" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Auto-Delete Old Records (days)</label>
-          <input class="input" id="setAutoDelete" type="number" placeholder="0 = never" value="0" />
-        </div>
-        <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save Settings</button>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-close="qrModal"><i class="fas fa-times"></i> Close</button>
       </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ADD / EDIT PATIENT MODAL -->
-<div class="modal-backdrop" id="patientModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h2 id="patientModalTitle"><i class="fas fa-user-plus"></i> Add New Patient</h2>
-      <button class="close-btn" onclick="closeModal('patientModal')"><i class="fas fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div style="text-align:center;margin-bottom:18px;">
-        <div style="position:relative;display:inline-block;cursor:pointer;" onclick="document.getElementById('avatarInput').click()">
-          <img id="avatarPreview" src="" style="width:80px;height:80px;border-radius:20px;object-fit:cover;background:#e2e8f0;display:none;" />
-          <div id="avatarPlaceholder" style="width:80px;height:80px;border-radius:20px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;margin:0 auto;"><i class="fas fa-user" style="font-size:1.8rem;color:#94a3b8;"></i></div>
-          <div style="position:absolute;bottom:-4px;right:-4px;background:var(--accent);color:#fff;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.65rem;"><i class="fas fa-camera"></i></div>
-        </div>
-        <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="previewAvatar(event)" />
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Patient ID *</label><input class="input" id="fPatientId" placeholder="Auto-generated" readonly /></div>
-        <div class="form-group"><label>First Name *</label><input class="input" id="fFirstName" placeholder="First name" /></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Middle Name</label><input class="input" id="fMiddleName" placeholder="Middle name" /></div>
-        <div class="form-group"><label>Last Name *</label><input class="input" id="fLastName" placeholder="Last name" /></div>
-      </div>
-      <div class="form-row3">
-        <div class="form-group"><label>Birth Date *</label><input class="input" id="fBirthDate" type="date" /></div>
-        <div class="form-group"><label>Age</label><input class="input" id="fAge" placeholder="Auto" readonly /></div>
-        <div class="form-group"><label>Sex *</label>
-          <select class="input" id="fSex"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Weight (kg)</label><input class="input" id="fWeight" type="number" step="0.1" /></div>
-        <div class="form-group"><label>Height (cm)</label><input class="input" id="fHeight" type="number" step="0.1" /></div>
-      </div>
-      <div class="form-group"><label>Address</label><textarea class="input" id="fAddress" rows="2"></textarea></div>
-      <div class="form-row">
-        <div class="form-group"><label>Guardian / Parent Name</label><input class="input" id="fGuardian" /></div>
-        <div class="form-group"><label>Contact Number</label><input class="input" id="fContact" /></div>
-      </div>
-      <div class="form-group"><label>Medical History / Allergies</label><textarea class="input" id="fHistory" rows="2"></textarea></div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-red" id="btnDeletePatient" onclick="deleteCurrentPatient()" style="display:none;"><i class="fas fa-trash"></i> Delete</button>
-      <button class="btn btn-ghost" onclick="closeModal('patientModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="savePatient()"><i class="fas fa-save"></i> Save Patient</button>
     </div>
   </div>
-</div>
 
-<!-- PATIENT DETAIL MODAL -->
-<div class="modal-backdrop" id="detailModal">
-  <div class="modal modal-lg">
-    <div class="patient-banner">
-      <img class="patient-avatar" id="dtAvatar" src="" />
-      <div>
-        <h2 id="dtName">—</h2>
-        <div class="meta" id="dtMeta"></div>
+  <!-- MODAL: DELETE PATIENT -->
+  <div class="modal-overlay" id="deletePatientModal">
+    <div class="modal modal-small">
+      <div class="modal-header">
+        <h3 style="color:#ef4444;"><i class="fas fa-exclamation-triangle"></i> Delete Patient</h3>
+        <button class="modal-close" data-close="deletePatientModal"><i class="fas fa-times"></i></button>
       </div>
-      <button class="close-btn" style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;" onclick="closeModal('detailModal')"><i class="fas fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="dtRecords"><i class="fas fa-notes-medical"></i> Records</button>
-        <button class="tab-btn" data-tab="dtFiles"><i class="fas fa-folder-open"></i> Files</button>
-        <button class="tab-btn" data-tab="dtVitals"><i class="fas fa-heartbeat"></i> Vitals</button>
-        <button class="tab-btn" data-tab="dtNotes"><i class="fas fa-sticky-note"></i> Notes</button>
+      <div class="modal-body">
+        <p id="deletePatientMsg" style="font-size:1.02rem;color:#4b5563;line-height:1.7;"></p>
       </div>
-
-      <div class="tab-content active" id="dtRecords">
-        <button class="btn btn-primary btn-sm" onclick="addRecord()" style="margin-bottom:12px;"><i class="fas fa-plus"></i> Add Record</button>
-        <div id="dtRecordsList"></div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-close="deletePatientModal"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn btn-danger" id="confirmDeletePatientBtn"><i class="fas fa-trash"></i> Delete Permanently</button>
       </div>
-
-      <div class="tab-content" id="dtFiles">
-        <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="uploadFiles()"><i class="fas fa-upload"></i> Upload Files</button>
-          <button class="btn btn-green btn-sm" onclick="takePhoto()"><i class="fas fa-camera"></i> Take Photo</button>
-          <input type="file" id="fileUploadInput" multiple style="display:none;" onchange="handleFileUpload(event)" />
-          <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleCameraCapture(event)" />
-        </div>
-        <div id="dtFilesGrid" class="file-grid"></div>
-      </div>
-
-      <div class="tab-content" id="dtVitals">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div class="form-group"><label>Weight (kg)</label><input class="input" id="vWeight" type="number" step="0.1" /></div>
-          <div class="form-group"><label>Height (cm)</label><input class="input" id="vHeight" type="number" step="0.1" /></div>
-          <div class="form-group"><label>Temperature (°C)</label><input class="input" id="vTemp" type="number" step="0.1" /></div>
-          <div class="form-group"><label>Heart Rate (bpm)</label><input class="input" id="vHeart" type="number" /></div>
-          <div class="form-group"><label>Blood Pressure</label><input class="input" id="vBP" placeholder="e.g. 120/80" /></div>
-          <div class="form-group"><label>Oxygen Saturation (%)</label><input class="input" id="vO2" type="number" /></div>
-        </div>
-        <button class="btn btn-primary" onclick="saveVitals()"><i class="fas fa-save"></i> Save Vitals</button>
-      </div>
-
-      <div class="tab-content" id="dtNotes">
-        <div class="form-group">
-          <label>Add Note</label>
-          <textarea class="input" id="newNote" rows="3" placeholder="Enter clinical note..."></textarea>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="addNote()" style="margin-bottom:16px;"><i class="fas fa-plus"></i> Add Note</button>
-        <div id="dtNotesList"></div>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal('detailModal')">Close</button>
-      <button class="btn btn-green" onclick="printPatientPDF()"><i class="fas fa-file-pdf"></i> Export PDF</button>
     </div>
   </div>
-</div>
 
-<!-- ADD RECORD MODAL -->
-<div class="modal-backdrop" id="recordModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h2><i class="fas fa-notes-medical"></i> Add Medical Record</h2>
-      <button class="close-btn" onclick="closeModal('recordModal')"><i class="fas fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label>Date</label><input class="input" id="rDate" type="date" /></div>
-        <div class="form-group"><label>Visit Type</label>
-          <select class="input" id="rType">
-            <option value="Consultation">Consultation</option>
-            <option value="Follow-up">Follow-up</option>
-            <option value="Emergency">Emergency</option>
-            <option value="Vaccination">Vaccination</option>
-            <option value="Check-up">Check-up</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group"><label>Diagnosis</label><input class="input" id="rDiagnosis" /></div>
-      <div class="form-group"><label>Treatment / Prescription</label><textarea class="input" id="rTreatment" rows="2"></textarea></div>
-      <div class="form-group"><label>Notes</label><textarea class="input" id="rNotes" rows="2"></textarea></div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal('recordModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveRecord()"><i class="fas fa-save"></i> Save Record</button>
-    </div>
-  </div>
-</div>
+  <!-- ===================== FIREBASE (CDN) ===================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+    import {
+      getFirestore, doc, setDoc, getDoc, deleteDoc,
+      collection, addDoc, onSnapshot, query, orderBy, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-<!-- VIEW RECORD MODAL -->
-<div class="modal-backdrop" id="viewRecordModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h2><i class="fas fa-eye"></i> Medical Record</h2>
-      <button class="close-btn" onclick="closeModal('viewRecordModal')"><i class="fas fa-xmark"></i></button>
-    </div>
-    <div class="modal-body" id="viewRecordBody"></div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal('viewRecordModal')">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- FLOATING SCAN BUTTON -->
-<div class="scan-fab" onclick="openScannerPage()"><i class="fas fa-camera"></i> Scan QR</div>
-
-<!-- IMAGE LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <button class="lb-nav" style="position:absolute;top:20px;right:20px;" onclick="closeLightbox()"><i class="fas fa-xmark"></i></button>
-  <img id="lightboxImg" src="" alt="Preview" />
-  <div class="lb-fname" id="lightboxName"></div>
-  <div class="lb-bar">
-    <button class="lb-nav" onclick="prevLightboxImg()"><i class="fas fa-chevron-left"></i></button>
-    <button class="lb-nav" onclick="nextLightboxImg()"><i class="fas fa-chevron-right"></i></button>
-    <button class="btn btn-primary btn-sm" onclick="downloadLightboxImg()"><i class="fas fa-download"></i> Download</button>
-    <button class="btn btn-red btn-sm" onclick="deleteLightboxImg()"><i class="fas fa-trash"></i> Delete</button>
-  </div>
-</div>
-
-<!-- PRINT TEMPLATE (hidden) -->
-<div id="printArea" style="display:none;"></div>
-
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, orderBy, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBmjJt58G5XFxykN0MhzzgwzRGeCOekkM",
-  authDomain: "new-era-pediatric.firebaseapp.com",
-  projectId: "new-era-pediatric",
-  storageBucket: "new-era-pediatric.firebasestorage.app",
-  messagingSenderId: "441796543456",
-  appId: "1:441796543456:web:79e51a79adca6832d1a185"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let patients = [];
-let currentPatient = null;
-let editingPatientId = null;
-let avatarData = null;
-let currentLightboxImages = [];
-let currentLightboxIndex = 0;
-
-window.db = db;
-window.collection = collection;
-window.doc = doc;
-window.getDoc = getDoc;
-window.getDocs = getDocs;
-window.setDoc = setDoc;
-window.updateDoc = updateDoc;
-window.deleteDoc = deleteDoc;
-window.query = query;
-window.orderBy = orderBy;
-window.addDoc = addDoc;
-window.onSnapshot = onSnapshot;
-
-// ——— INIT ———
-window.addEventListener('DOMContentLoaded', async () => {
-  setupNavigation();
-  setupTabs();
-  setupEventListeners();
-  await loadAllPatients();
-  renderDashboard();
-  generateAllQR();
-});
-
-function setupNavigation() {
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
-      const page = item.dataset.page;
-      document.querySelectorAll('[id^="page-"]').forEach(p => p.style.display = 'none');
-      document.getElementById('page-' + page).style.display = 'block';
-      if (page === 'files') loadAllFiles();
-      if (page === 'qrcodes') generateAllQR();
-    });
-  });
-}
-
-function setupTabs() {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-  });
-}
-
-function setupEventListeners() {
-  document.getElementById('btnAddPatient').addEventListener('click', () => openAddPatient());
-  document.getElementById('btnExport').addEventListener('click', () => exportData());
-  document.getElementById('searchPatients').addEventListener('input', renderPatientTable);
-  document.getElementById('filterAge').addEventListener('change', renderPatientTable);
-  document.getElementById('searchFiles').addEventListener('input', renderAllFiles);
-  document.getElementById('filterFileType').addEventListener('change', renderAllFiles);
-  document.getElementById('fBirthDate').addEventListener('change', () => {
-    const birth = document.getElementById('fBirthDate').value;
-    if (birth) {
-      const age = calcAge(birth);
-      document.getElementById('fAge').value = age;
-    }
-  });
-  // Close modals on backdrop click
-  document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-    backdrop.addEventListener('click', (e) => {
-      if (e.target === backdrop) {
-        backdrop.classList.remove('open');
-      }
-    });
-  });
-}
-
-// ——— TOAST ———
-function showToast(message, type = 'green') {
-  const wrap = document.getElementById('toastWrap');
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
-  const icons = { green: 'fa-check-circle', red: 'fa-exclamation-circle', blue: 'fa-info-circle' };
-  toast.innerHTML = `<i class="fas ${icons[type] || icons.green}"></i> ${message}`;
-  wrap.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(30px)'; setTimeout(() => toast.remove(), 300); }, 3500);
-}
-window.showToast = showToast;
-
-// ——— HELPERS ———
-function calcAge(birthDate) {
-  const today = new Date();
-  const birth = new Date(birthDate);
-  let years = today.getFullYear() - birth.getFullYear();
-  let months = today.getMonth() - birth.getMonth();
-  if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) { years--; months += 12; }
-  if (years < 1) return `${months} mo`;
-  return `${years} yr ${months} mo`;
-}
-
-function generatePatientId() {
-  const prefix = 'NEP';
-  const num = String(Date.now()).slice(-6);
-  return `${prefix}-${num}`;
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '—';
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-}
-
-function formatDateTime(dateStr) {
-  if (!dateStr) return '—';
-  const d = new Date(dateStr);
-  return d.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
-
-function getFileTypeClass(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-  if (['pdf'].includes(ext)) return 'pdf';
-  if (['doc', 'docx'].includes(ext)) return 'doc';
-  if (['xls', 'xlsx'].includes(ext)) return 'xls';
-  return 'file';
-}
-
-function getFileTag(filename) {
-  const name = filename.toLowerCase();
-  if (name.includes('lab') || name.includes('blood') || name.includes('test')) return { class: 'tag-lab', text: 'Lab Result' };
-  if (name.includes('presc') || name.includes('rx')) return { class: 'tag-presc', text: 'Prescription' };
-  if (name.includes('xray') || name.includes('x-ray')) return { class: 'tag-xray', text: 'X-Ray' };
-  if (name.includes('ultra') || name.includes('usg')) return { class: 'tag-ultrasound', text: 'Ultrasound' };
-  return { class: 'tag-other', text: 'General' };
-}
-
-function isImage(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-  return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(ext);
-}
-
-function compressImage(dataUrl, maxWidth = 800, quality = 0.7) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let w = img.width;
-      let h = img.height;
-      if (w > maxWidth) { h = (maxWidth / w) * h; w = maxWidth; }
-      canvas.width = w;
-      canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      resolve(canvas.toDataURL('image/jpeg', quality));
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmjJt58G5XFxykN0MhzzgwzRGeCOekkM",
+      authDomain: "new-era-pediatric.firebaseapp.com",
+      projectId: "new-era-pediatric",
+      storageBucket: "new-era-pediatric.firebasestorage.app",
+      messagingSenderId: "441796543456",
+      appId: "1:441796543456:web:79e51a79adca6832d1a185",
+      measurementId: "G-EKDHPWJV76"
     };
-    img.onerror = () => resolve(dataUrl);
-    img.src = dataUrl;
-  });
-}
 
-// ——— MODALS ———
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-window.openModal = openModal;
-window.closeModal = closeModal;
+    const firebaseApp = initializeApp(firebaseConfig);
+    const db = getFirestore(firebaseApp);
 
-// ——— PATIENTS ———
-async function loadAllPatients() {
-  try {
-    const snapshot = await getDocs(collection(db, 'patients'));
-    patients = [];
-    snapshot.forEach((docSnap) => {
-      patients.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    renderPatientTable();
-    renderDashboard();
-    return patients;
-  } catch (err) {
-    showToast('Error loading patients: ' + err.message, 'red');
-    return [];
-  }
-}
-window.loadAllPatients = loadAllPatients;
+    (function () {
+      'use strict';
 
-function renderPatientTable() {
-  const tbody = document.getElementById('patientTable');
-  const search = document.getElementById('searchPatients').value.toLowerCase();
-  const ageFilter = document.getElementById('filterAge').value;
+      function $(id) { return document.getElementById(id); }
+      function $qa(sel) { return document.querySelectorAll(sel); }
 
-  let filtered = patients.filter(p => {
-    const name = ((p.first_name || '') + ' ' + (p.last_name || '')).toLowerCase();
-    const id = (p.patient_id || '').toLowerCase();
-    const matchSearch = name.includes(search) || id.includes(search);
-    let matchAge = true;
-    if (ageFilter) {
-      const age = p.birth_date ? calcAge(p.birth_date) : '';
-      const ageNum = parseInt(age) || 0;
-      const [min, max] = ageFilter.split('-').map(Number);
-      matchAge = ageNum >= min && ageNum <= max;
-    }
-    return matchSearch && matchAge;
-  });
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><i class="fas fa-user-slash"></i><p>No patients found</p></div></td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = filtered.map(p => {
-    const name = `${p.first_name || ''} ${p.middle_name || ''} ${p.last_name || ''}`.trim();
-    const age = p.birth_date ? calcAge(p.birth_date) : '—';
-    return `
-      <tr>
-        <td><img class="avatar-sm" src="${p.avatar || ''}" onerror="this.style.display='none'" /></td>
-        <td><strong style="color:var(--accent);">${p.patient_id || p.id}</strong></td>
-        <td><strong>${name}</strong></td>
-        <td>${age}</td>
-        <td>${p.sex || '—'}</td>
-        <td>${p.guardian_name || '—'}</td>
-        <td><span class="badge badge-blue"><i class="fas fa-folder"></i> ${p.file_count || 0}</span></td>
-        <td>
-          <div style="display:flex;gap:5px;">
-            <button class="btn btn-ghost btn-sm" onclick="viewPatient('${p.id}')"><i class="fas fa-eye"></i></button>
-            <button class="btn btn-ghost btn-sm" onclick="editPatient('${p.id}')"><i class="fas fa-pen"></i></button>
-            <button class="btn btn-red btn-sm" onclick="deletePatient('${p.id}')"><i class="fas fa-trash"></i></button>
-          </div>
-        </td>
-      </tr>`;
-  }).join('');
-}
-
-function openAddPatient() {
-  editingPatientId = null;
-  avatarData = null;
-  document.getElementById('patientModalTitle').innerHTML = '<i class="fas fa-user-plus"></i> Add New Patient';
-  document.getElementById('btnDeletePatient').style.display = 'none';
-  document.getElementById('fPatientId').value = generatePatientId();
-  ['fFirstName','fMiddleName','fLastName','fBirthDate','fAge','fWeight','fHeight','fAddress','fGuardian','fContact','fHistory'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('fSex').value = '';
-  document.getElementById('avatarPreview').style.display = 'none';
-  document.getElementById('avatarPlaceholder').style.display = 'flex';
-  openModal('patientModal');
-}
-window.openAddPatient = openAddPatient;
-
-async function editPatient(patientId) {
-  const p = patients.find(x => x.id === patientId);
-  if (!p) return;
-  editingPatientId = patientId;
-  document.getElementById('patientModalTitle').innerHTML = '<i class="fas fa-user-edit"></i> Edit Patient';
-  document.getElementById('btnDeletePatient').style.display = 'inline-flex';
-  document.getElementById('fPatientId').value = p.patient_id || p.id;
-  document.getElementById('fFirstName').value = p.first_name || '';
-  document.getElementById('fMiddleName').value = p.middle_name || '';
-  document.getElementById('fLastName').value = p.last_name || '';
-  document.getElementById('fBirthDate').value = p.birth_date || '';
-  document.getElementById('fAge').value = p.birth_date ? calcAge(p.birth_date) : '';
-  document.getElementById('fSex').value = p.sex || '';
-  document.getElementById('fWeight').value = p.weight || '';
-  document.getElementById('fHeight').value = p.height || '';
-  document.getElementById('fAddress').value = p.address || '';
-  document.getElementById('fGuardian').value = p.guardian_name || '';
-  document.getElementById('fContact').value = p.contact_number || '';
-  document.getElementById('fHistory').value = p.medical_history || '';
-
-  if (p.avatar) {
-    document.getElementById('avatarPreview').src = p.avatar;
-    document.getElementById('avatarPreview').style.display = 'block';
-    document.getElementById('avatarPlaceholder').style.display = 'none';
-  } else {
-    document.getElementById('avatarPreview').style.display = 'none';
-    document.getElementById('avatarPlaceholder').style.display = 'flex';
-  }
-  openModal('patientModal');
-}
-window.editPatient = editPatient;
-
-function previewAvatar(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    avatarData = await compressImage(e.target.result, 200, 0.8);
-    document.getElementById('avatarPreview').src = avatarData;
-    document.getElementById('avatarPreview').style.display = 'block';
-    document.getElementById('avatarPlaceholder').style.display = 'none';
-  };
-  reader.readAsDataURL(file);
-}
-window.previewAvatar = previewAvatar;
-
-async function savePatient() {
-  const firstName = document.getElementById('fFirstName').value.trim();
-  const lastName = document.getElementById('fLastName').value.trim();
-  const birthDate = document.getElementById('fBirthDate').value;
-  const sex = document.getElementById('fSex').value;
-
-  if (!firstName || !lastName || !birthDate || !sex) {
-    showToast('Please fill in all required fields (First Name, Last Name, Birth Date, Sex)', 'red');
-    return;
-  }
-
-  const patientId = document.getElementById('fPatientId').value;
-  const data = {
-    patient_id: patientId,
-    first_name: firstName,
-    middle_name: document.getElementById('fMiddleName').value.trim(),
-    last_name: lastName,
-    birth_date: birthDate,
-    sex: sex,
-    weight: document.getElementById('fWeight').value,
-    height: document.getElementById('fHeight').value,
-    address: document.getElementById('fAddress').value.trim(),
-    guardian_name: document.getElementById('fGuardian').value.trim(),
-    contact_number: document.getElementById('fContact').value.trim(),
-    medical_history: document.getElementById('fHistory').value.trim(),
-    avatar: avatarData || (patients.find(p => p.id === editingPatientId)?.avatar) || '',
-    updated_at: new Date().toISOString()
-  };
-
-  try {
-    if (editingPatientId) {
-      await setDoc(doc(db, 'patients', editingPatientId), data, { merge: true });
-      showToast('Patient updated successfully!', 'green');
-    } else {
-      data.created_at = new Date().toISOString();
-      data.file_count = 0;
-      await setDoc(doc(db, 'patients', patientId), data);
-      showToast('Patient added successfully!', 'green');
-    }
-    closeModal('patientModal');
-    await loadAllPatients();
-    generateAllQR();
-  } catch (err) {
-    showToast('Error saving patient: ' + err.message, 'red');
-  }
-}
-window.savePatient = savePatient;
-
-async function deletePatient(patientId) {
-  if (!confirm('Are you sure you want to delete this patient? This action cannot be undone.')) return;
-  try {
-    await deleteDoc(doc(db, 'patients', patientId));
-    showToast('Patient deleted.', 'green');
-    await loadAllPatients();
-  } catch (err) {
-    showToast('Error deleting patient: ' + err.message, 'red');
-  }
-}
-window.deletePatient = deletePatient;
-
-function deleteCurrentPatient() {
-  if (editingPatientId) {
-    closeModal('patientModal');
-    deletePatient(editingPatientId);
-  }
-}
-window.deleteCurrentPatient = deleteCurrentPatient;
-
-// ——— DASHBOARD ———
-function renderDashboard() {
-  document.getElementById('statPatients').textContent = patients.length;
-
-  let totalFiles = 0;
-  let totalRecords = 0;
-  let todayCount = 0;
-  const today = new Date().toDateString();
-
-  patients.forEach(p => {
-    totalFiles += p.file_count || 0;
-    totalRecords += p.record_count || 0;
-    if (p.created_at && new Date(p.created_at).toDateString() === today) todayCount++;
-  });
-
-  document.getElementById('statFiles').textContent = totalFiles;
-  document.getElementById('statRecords').textContent = totalRecords;
-  document.getElementById('statToday').textContent = todayCount;
-
-  // Recent activity
-  const recent = [...patients]
-    .filter(p => p.updated_at || p.created_at)
-    .sort((a, b) => new Date(b.updated_at || b.created_at) - new Date(a.updated_at || a.created_at))
-    .slice(0, 5);
-
-  const tbody = document.getElementById('recentActivity');
-  if (recent.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3"><div class="empty"><i class="fas fa-inbox"></i><p>No recent activity</p></div></td></tr>`;
-  } else {
-    tbody.innerHTML = recent.map(p => {
-      const name = `${p.first_name || ''} ${p.last_name || ''}`.trim();
-      return `<tr>
-        <td><strong>${name}</strong></td>
-        <td><span class="badge badge-green">${p.updated_at ? 'Updated' : 'Added'}</span></td>
-        <td>${formatDateTime(p.updated_at || p.created_at)}</td>
-      </tr>`;
-    }).join('');
-  }
-}
-
-// ——— PATIENT DETAIL ———
-async function viewPatient(patientId) {
-  const p = patients.find(x => x.id === patientId);
-  if (!p) return;
-  currentPatient = p;
-
-  const name = `${p.first_name || ''} ${p.middle_name || ''} ${p.last_name || ''}`.trim();
-  const age = p.birth_date ? calcAge(p.birth_date) : '—';
-
-  document.getElementById('dtName').textContent = name;
-  document.getElementById('dtAvatar').src = p.avatar || '';
-  document.getElementById('dtMeta').innerHTML = `
-    <span><i class="fas fa-id-card"></i> ${p.patient_id || p.id}</span>
-    <span><i class="fas fa-birthday-cake"></i> ${formatDate(p.birth_date)}</span>
-    <span><i class="fas fa-child"></i> ${age}</span>
-    <span><i class="fas fa-venus-mars"></i> ${p.sex || '—'}</span>
-    ${p.guardian_name ? `<span><i class="fas fa-user-shield"></i> ${p.guardian_name}</span>` : ''}
-    ${p.contact_number ? `<span><i class="fas fa-phone"></i> ${p.contact_number}</span>` : ''}
-  `;
-
-  // Load vitals
-  document.getElementById('vWeight').value = p.weight || '';
-  document.getElementById('vHeight').value = p.height || '';
-  document.getElementById('vTemp').value = p.temperature || '';
-  document.getElementById('vHeart').value = p.heart_rate || '';
-  document.getElementById('vBP').value = p.blood_pressure || '';
-  document.getElementById('vO2').value = p.oxygen_saturation || '';
-
-  openModal('detailModal');
-  await loadPatientRecords(patientId);
-  await loadPatientFiles(patientId);
-  await loadPatientNotes(patientId);
-}
-window.viewPatient = viewPatient;
-
-async function loadPatientRecords(patientId) {
-  const container = document.getElementById('dtRecordsList');
-  try {
-    const snapshot = await getDocs(query(collection(db, 'patients', patientId, 'records'), orderBy('date', 'desc')));
-    if (snapshot.empty) {
-      container.innerHTML = `<div class="empty"><i class="fas fa-notes-medical"></i><p>No medical records yet</p></div>`;
-      return;
-    }
-    container.innerHTML = snapshot.docs.map(d => {
-      const r = d.data();
-      return `<div class="note-item" style="cursor:pointer;" onclick="viewRecordDetail('${d.id}')">
-        <div class="date"><i class="fas fa-calendar"></i> ${formatDate(r.date)} &nbsp;•&nbsp; <span class="badge badge-blue">${r.visit_type || 'Consultation'}</span></div>
-        <div class="text"><strong>Diagnosis:</strong> ${r.diagnosis || '—'}</div>
-        ${r.treatment ? `<div class="text"><strong>Treatment:</strong> ${r.treatment}</div>` : ''}
-      </div>`;
-    }).join('');
-  } catch (err) {
-    container.innerHTML = `<div class="empty"><i class="fas fa-exclamation-triangle"></i><p>Error loading records</p></div>`;
-  }
-}
-
-async function loadPatientFiles(patientId) {
-  const container = document.getElementById('dtFilesGrid');
-  try {
-    const snapshot = await getDocs(query(collection(db, 'patients', patientId, 'files'), orderBy('uploaded_at', 'desc')));
-    if (snapshot.empty) {
-      container.innerHTML = `<div class="empty" style="grid-column:1/-1;"><i class="fas fa-folder-open"></i><p>No files uploaded yet</p></div>`;
-      return;
-    }
-    currentLightboxImages = [];
-    snapshot.docs.forEach(d => {
-      const f = d.data();
-      if (isImage(f.filename)) currentLightboxImages.push({ id: d.id, ...f });
-    });
-
-    container.innerHTML = snapshot.docs.map(d => {
-      const f = d.data();
-      const tag = getFileTag(f.filename);
-      const typeClass = getFileTypeClass(f.filename);
-      if (isImage(f.filename)) {
-        return `<div class="file-card">
-          <img src="${f.data}" onclick="openLightbox('${d.id}')" />
-          <div class="file-info">
-            <div class="fname">${f.filename}</div>
-            <div class="fdate"><i class="fas fa-calendar"></i> ${formatDateTime(f.uploaded_at)}</div>
-            <div class="file-tag ${tag.class}">${tag.text}</div>
-            <div class="file-actions">
-              <button class="btn btn-ghost btn-sm" onclick="downloadFile('${d.id}')"><i class="fas fa-download"></i></button>
-              <button class="btn btn-red btn-sm" onclick="deleteFile('${d.id}')"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-        </div>`;
+      function esc(str) {
+        if (!str) return '';
+        var d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
       }
-      return `<div class="file-card">
-        <div class="fi ${typeClass}"><i class="fas fa-file-${typeClass === 'pdf' ? 'pdf' : typeClass === 'doc' ? 'word' : typeClass === 'xls' ? 'excel' : 'alt'}"></i></div>
-        <div class="file-info">
-          <div class="fname">${f.filename}</div>
-          <div class="fdate"><i class="fas fa-calendar"></i> ${formatDateTime(f.uploaded_at)}</div>
-          <div class="file-tag ${tag.class}">${tag.text}</div>
-          <div class="file-actions">
-            <button class="btn btn-ghost btn-sm" onclick="downloadFile('${d.id}')"><i class="fas fa-download"></i></button>
-            <button class="btn btn-red btn-sm" onclick="deleteFile('${d.id}')"><i class="fas fa-trash"></i></button>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-  } catch (err) {
-    container.innerHTML = `<div class="empty" style="grid-column:1/-1;"><i class="fas fa-exclamation-triangle"></i><p>Error loading files</p></div>`;
-  }
-}
 
-async function loadPatientNotes(patientId) {
-  const container = document.getElementById('dtNotesList');
-  try {
-    const snapshot = await getDocs(query(collection(db, 'patients', patientId, 'notes'), orderBy('created_at', 'desc')));
-    if (snapshot.empty) {
-      container.innerHTML = `<div class="empty"><i class="fas fa-sticky-note"></i><p>No notes yet</p></div>`;
-      return;
-    }
-    container.innerHTML = snapshot.docs.map(d => {
-      const n = d.data();
-      return `<div class="note-item">
-        <div class="date"><i class="fas fa-calendar"></i> ${formatDateTime(n.created_at)}</div>
-        <div class="text">${n.text || ''}</div>
-      </div>`;
-    }).join('');
-  } catch (err) {
-    container.innerHTML = `<div class="empty"><i class="fas fa-exclamation-triangle"></i><p>Error loading notes</p></div>`;
-  }
-}
+      // ================================================
+      //  TOAST
+      // ================================================
+      var toastTimer = null;
+      function toast(msg, type) {
+        type = type || 'success';
+        var el = $('toast');
+        $('toastMsg').textContent = msg;
+        el.className = 'toast ' + type;
+        var icon = el.querySelector('i');
+        if (icon) {
+          icon.className = type === 'success' ? 'fas fa-check-circle'
+                         : type === 'error'   ? 'fas fa-exclamation-circle'
+                         : 'fas fa-info-circle';
+        }
+        clearTimeout(toastTimer);
+        void el.offsetWidth;
+        el.classList.add('show');
+        toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3500);
+      }
 
-// ——— RECORDS ———
-function addRecord() {
-  if (!currentPatient) return;
-  document.getElementById('rDate').value = new Date().toISOString().split('T')[0];
-  document.getElementById('rType').value = 'Consultation';
-  document.getElementById('rDiagnosis').value = '';
-  document.getElementById('rTreatment').value = '';
-  document.getElementById('rNotes').value = '';
-  openModal('recordModal');
-}
-window.addRecord = addRecord;
+      // ================================================
+      //  MODALS
+      // ================================================
+      function openModal(id) {
+        closeAllModals();
+        var m = $(id);
+        if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; }
+      }
+      function closeModal(id) {
+        var m = $(id);
+        if (m) m.classList.remove('active');
+        if (!document.querySelector('.modal-overlay.active')) document.body.style.overflow = '';
+      }
+      function closeAllModals() {
+        $qa('.modal-overlay').forEach(function (m) { m.classList.remove('active'); });
+        document.body.style.overflow = '';
+      }
 
-async function saveRecord() {
-  if (!currentPatient) return;
-  const data = {
-    date: document.getElementById('rDate').value,
-    visit_type: document.getElementById('rType').value,
-    diagnosis: document.getElementById('rDiagnosis').value.trim(),
-    treatment: document.getElementById('rTreatment').value.trim(),
-    notes: document.getElementById('rNotes').value.trim(),
-    created_at: new Date().toISOString()
-  };
-  try {
-    await addDoc(collection(db, 'patients', currentPatient.id, 'records'), data);
-    showToast('Record saved!', 'green');
-    closeModal('recordModal');
-    await loadPatientRecords(currentPatient.id);
-    await loadAllPatients();
-  } catch (err) {
-    showToast('Error saving record: ' + err.message, 'red');
-  }
-}
-window.saveRecord = saveRecord;
-
-async function viewRecordDetail(recordId) {
-  try {
-    const snap = await getDoc(doc(db, 'patients', currentPatient.id, 'records', recordId));
-    if (!snap.exists()) return;
-    const r = snap.data();
-    document.getElementById('viewRecordBody').innerHTML = `
-      <div class="form-group"><label>Visit Type</label><div style="font-size:.95rem;color:var(--ink);"><span class="badge badge-blue">${r.visit_type || 'Consultation'}</span></div></div>
-      <div class="form-group"><label>Date</label><div style="font-size:.9rem;color:var(--ink2);">${formatDate(r.date)}</div></div>
-      <div class="form-group"><label>Diagnosis</label><div style="font-size:.88rem;color:var(--ink2);">${r.diagnosis || '—'}</div></div>
-      <div class="form-group"><label>Treatment / Prescription</label><div style="font-size:.88rem;color:var(--ink2);">${r.treatment || '—'}</div></div>
-      <div class="form-group"><label>Notes</label><div style="font-size:.88rem;color:var(--ink2);">${r.notes || '—'}</div></div>
-      <div class="form-group"><label>Created</label><div style="font-size:.82rem;color:var(--muted);">${formatDateTime(r.created_at)}</div></div>
-    `;
-    openModal('viewRecordModal');
-  } catch (err) {
-    showToast('Error loading record.', 'red');
-  }
-}
-window.viewRecordDetail = viewRecordDetail;
-
-// ——— VITALS ———
-async function saveVitals() {
-  if (!currentPatient) return;
-  const data = {
-    weight: document.getElementById('vWeight').value,
-    height: document.getElementById('vHeight').value,
-    temperature: document.getElementById('vTemp').value,
-    heart_rate: document.getElementById('vHeart').value,
-    blood_pressure: document.getElementById('vBP').value,
-    oxygen_saturation: document.getElementById('vO2').value,
-    updated_at: new Date().toISOString()
-  };
-  try {
-    await setDoc(doc(db, 'patients', currentPatient.id), data, { merge: true });
-    showToast('Vitals saved!', 'green');
-    await loadAllPatients();
-  } catch (err) {
-    showToast('Error saving vitals: ' + err.message, 'red');
-  }
-}
-window.saveVitals = saveVitals;
-
-// ——— NOTES ———
-async function addNote() {
-  if (!currentPatient) return;
-  const text = document.getElementById('newNote').value.trim();
-  if (!text) { showToast('Please enter a note.', 'red'); return; }
-  try {
-    await addDoc(collection(db, 'patients', currentPatient.id, 'notes'), {
-      text: text,
-      created_at: new Date().toISOString()
-    });
-    document.getElementById('newNote').value = '';
-    showToast('Note added!', 'green');
-    await loadPatientNotes(currentPatient.id);
-  } catch (err) {
-    showToast('Error adding note: ' + err.message, 'red');
-  }
-}
-window.addNote = addNote;
-
-// ——— FILES ———
-function uploadFiles() {
-  document.getElementById('fileUploadInput').click();
-}
-window.uploadFiles = uploadFiles;
-
-function takePhoto() {
-  document.getElementById('cameraInput').click();
-}
-window.takePhoto = takePhoto;
-
-async function handleFileUpload(event) {
-  const files = event.target.files;
-  if (!files || !files.length || !currentPatient) return;
-  await processFiles(files);
-  event.target.value = '';
-}
-window.handleFileUpload = handleFileUpload;
-
-async function handleCameraCapture(event) {
-  const files = event.target.files;
-  if (!files || !files.length || !currentPatient) return;
-  await processFiles(files);
-  event.target.value = '';
-}
-window.handleCameraCapture = handleCameraCapture;
-
-async function processFiles(fileList) {
-  showToast('Uploading files...', 'blue');
-  let successCount = 0;
-  for (const file of fileList) {
-    try {
-      let data;
-      if (isImage(file.name)) {
-        const dataUrl = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve(e.target.result);
-          reader.readAsDataURL(file);
+      $qa('.modal-overlay').forEach(function (overlay) {
+        overlay.addEventListener('click', function (e) {
+          if (e.target === this) {
+            this.classList.remove('active');
+            if (!document.querySelector('.modal-overlay.active')) document.body.style.overflow = '';
+          }
         });
-        data = await compressImage(dataUrl, 1024, 0.7);
-      } else {
-        data = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (e) => resolve(e.target.result);
-          reader.readAsDataURL(file);
+      });
+
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-close]');
+        if (btn) closeModal(btn.getAttribute('data-close'));
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAllModals();
+      });
+
+      // ================================================
+      //  URL HELPERS
+      // ================================================
+      function getBaseUrl() {
+        return window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+      }
+      function getPatientUrl(id) {
+        return getBaseUrl() + 'index.html?patient=' + encodeURIComponent(id);
+      }
+
+      // ================================================
+      //  FIREBASE: PATIENT LIST (REAL-TIME)
+      // ================================================
+      var firebasePatients = [];
+
+      function renderPatientList() {
+        var container = $('patientList');
+        var emptyMsg = $('emptyPatients');
+
+        var list = firebasePatients;
+
+        if (list.length === 0) {
+          try {
+            list = JSON.parse(localStorage.getItem('nep_patient_list') || '[]');
+          } catch (e) { list = []; }
+        }
+
+        if (list.length === 0) {
+          list = [{ id: 'demo-patient-001', name: 'Sophia Marie Dela Cruz', age: '5 years old', gender: 'Female', birthday: '2020-03-15', guardian: 'Maria Dela Cruz', contact: '+63 917 123 4567', address: '123 Sampaguita St., Barangay San Jose, Quezon City, Metro Manila', avatar: '' }];
+        }
+
+        container.innerHTML = '';
+        emptyMsg.style.display = list.length === 0 ? 'block' : 'none';
+
+        list.forEach(function (p) {
+          var card = document.createElement('div');
+          card.className = 'patient-card';
+
+          var avatarHTML = '<div class="patient-avatar-sm"><i class="fas fa-child"></i></div>';
+          if (p.avatar && p.avatar !== '') {
+            avatarHTML = '<div class="patient-avatar-sm"><img src="' + esc(p.avatar) + '" alt="" onerror="this.parentElement.innerHTML=\'<i class=&quot;fas fa-child&quot;></i>\'" /></div>';
+          }
+
+          var url = getPatientUrl(p.id);
+
+          card.innerHTML =
+            '<div class="patient-info">' + avatarHTML +
+              '<div>' +
+                '<div class="patient-name">' + esc(p.name) + '</div>' +
+                '<div class="patient-id">ID: ' + esc(p.id) + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="patient-actions">' +
+              '<a href="' + url + '" class="btn btn-sm btn-outline" target="_blank"><i class="fas fa-external-link-alt"></i> Open</a>' +
+              '<button class="btn btn-sm btn-info" data-action="qr" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-qrcode"></i> QR</button>' +
+              '<button class="btn btn-sm btn-primary" data-action="copy" data-id="' + esc(p.id) + '"><i class="fas fa-copy"></i> Copy Link</button>' +
+              '<button class="btn btn-sm btn-danger" data-action="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.name) + '"><i class="fas fa-trash"></i></button>' +
+            '</div>';
+
+          container.appendChild(card);
         });
       }
 
-      await addDoc(collection(db, 'patients', currentPatient.id, 'files'), {
-        filename: file.name,
-        data: data,
-        size: file.size,
-        type: file.type,
-        uploaded_at: new Date().toISOString()
+      // ================================================
+      //  FIREBASE: REAL-TIME LISTENER
+      // ================================================
+      function startFirebaseListeners() {
+        var patientsRef = collection(db, "patients");
+
+        onSnapshot(patientsRef, function (snapshot) {
+          var list = [];
+          snapshot.forEach(function (docSnap) {
+            var data = docSnap.data();
+            list.push({
+              id: docSnap.id,
+              name: data.name || 'Unknown',
+              age: data.age || '',
+              gender: data.gender || '',
+              birthday: data.birthday || '',
+              guardian: data.guardian || '',
+              contact: data.contact || '',
+              address: data.address || '',
+              avatar: data.avatar || ''
+            });
+          });
+          firebasePatients = list;
+
+          try {
+            var simpleList = list.map(function (p) { return { id: p.id, name: p.name }; });
+            localStorage.setItem('nep_patient_list', JSON.stringify(simpleList));
+          } catch (e) {}
+
+          renderPatientList();
+
+          var badge = $('syncBadge');
+          if (badge) {
+            badge.className = 'sync-badge';
+            badge.innerHTML = '<i class="fas fa-check-circle"></i> Synced (' + list.length + ' patients)';
+          }
+        }, function (error) {
+          console.warn('Firebase listener error:', error);
+          var badge = $('syncBadge');
+          if (badge) {
+            badge.className = 'sync-badge syncing';
+            badge.innerHTML = '<i class="fas fa-exclamation-circle"></i> Offline mode';
+          }
+        });
+      }
+
+      // ================================================
+      //  FIREBASE: ADD PATIENT
+      // ================================================
+      async function firebaseAddPatient(patientData) {
+        try {
+          if (patientData.avatar && patientData.avatar !== '') {
+            patientData.avatar = await compressAvatar(patientData.avatar);
+          }
+
+          await setDoc(doc(db, "patients", patientData.id), {
+            name: patientData.name || '',
+            age: patientData.age || '',
+            gender: patientData.gender || '',
+            birthday: patientData.birthday || '',
+            guardian: patientData.guardian || '',
+            contact: patientData.contact || '',
+            address: patientData.address || '',
+            avatar: patientData.avatar || '',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+          console.log('Patient added to Firebase:', patientData.id);
+        } catch (e) {
+          console.error('Firebase add error:', e);
+          toast('Cloud sync error. Saved locally.', 'error');
+        }
+      }
+
+      // ================================================
+      //  FIREBASE: DELETE PATIENT
+      // ================================================
+      async function firebaseDeletePatient(patientId) {
+        try {
+          await deleteDoc(doc(db, "patients", patientId));
+          console.log('Patient deleted from Firebase:', patientId);
+        } catch (e) {
+          console.error('Firebase delete error:', e);
+        }
+      }
+
+      // ================================================
+      //  COMPRESS AVATAR
+      // ================================================
+      function compressAvatar(dataUrl) {
+        return new Promise(function (resolve) {
+          var img = new Image();
+          img.onload = function () {
+            var canvas = document.createElement('canvas');
+            var MAX = 300;
+            var w = img.width;
+            var h = img.height;
+            if (w > h) {
+              if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+            } else {
+              if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+            }
+            canvas.width = w;
+            canvas.height = h;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          };
+          img.onerror = function () { resolve(dataUrl); };
+          img.src = dataUrl;
+        });
+      }
+
+      // ================================================
+      //  EVENT DELEGATION
+      // ================================================
+      $('patientList').addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        var action = btn.getAttribute('data-action');
+        var id = btn.getAttribute('data-id');
+        var name = btn.getAttribute('data-name');
+
+        if (action === 'qr') showQRCode(id, name);
+        else if (action === 'copy') copyLink(id);
+        else if (action === 'delete') confirmDelete(id, name);
       });
-      successCount++;
-    } catch (err) {
-      showToast(`Error uploading ${file.name}`, 'red');
-    }
-  }
-  if (successCount > 0) {
-    showToast(`${successCount} file(s) uploaded!`, 'green');
-    await loadPatientFiles(currentPatient.id);
-    await loadAllPatients();
-  }
-}
 
-async function deleteFile(fileId) {
-  if (!confirm('Delete this file?')) return;
-  try {
-    await deleteDoc(doc(db, 'patients', currentPatient.id, 'files', fileId));
-    showToast('File deleted.', 'green');
-    await loadPatientFiles(currentPatient.id);
-  } catch (err) {
-    showToast('Error deleting file.', 'red');
-  }
-}
-window.deleteFile = deleteFile;
+      // ================================================
+      //  COPY LINK
+      // ================================================
+      function copyLink(patientId) {
+        var url = getPatientUrl(patientId);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function () {
+            toast('Link copied to clipboard!');
+          }).catch(function () {
+            fallbackCopy(url);
+          });
+        } else {
+          fallbackCopy(url);
+        }
+      }
 
-async function downloadFile(fileId) {
-  try {
-    const snap = await getDoc(doc(db, 'patients', currentPatient.id, 'files', fileId));
-    if (!snap.exists()) return;
-    const f = snap.data();
-    const link = document.createElement('a');
-    link.href = f.data;
-    link.download = f.filename;
-    link.click();
-  } catch (err) {
-    showToast('Error downloading file.', 'red');
-  }
-}
-window.downloadFile = downloadFile;
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          toast('Link copied to clipboard!');
+        } catch (e) {
+          toast('Could not copy. Please copy manually.', 'error');
+        }
+        document.body.removeChild(ta);
+      }
 
-// ——— LIGHTBOX ———
-function openLightbox(fileId) {
-  const idx = currentLightboxImages.findIndex(f => f.id === fileId);
-  if (idx === -1) return;
-  currentLightboxIndex = idx;
-  showLightboxImage();
-  document.getElementById('lightbox').classList.add('open');
-}
-window.openLightbox = openLightbox;
+      // ================================================
+      //  QR CODE
+      // ================================================
+      var currentQR = { id: '', name: '', url: '' };
 
-function showLightboxImage() {
-  const img = currentLightboxImages[currentLightboxIndex];
-  if (!img) return;
-  document.getElementById('lightboxImg').src = img.data;
-  document.getElementById('lightboxName').textContent = `${img.filename} (${currentLightboxIndex + 1}/${currentLightboxImages.length})`;
-}
+      function showQRCode(patientId, patientName) {
+        var url = getPatientUrl(patientId);
+        currentQR = { id: patientId, name: patientName, url: url };
 
-function prevLightboxImg() {
-  currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
-  showLightboxImage();
-}
-window.prevLightboxImg = prevLightboxImg;
+        $('qrLoading').style.display = 'block';
+        $('qrLoading').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating QR code...';
+        $('qrImage').style.display = 'none';
+        $('downloadQRBtn').style.display = 'none';
+        $('qrUrlText').innerHTML =
+          '<strong>Patient:</strong> ' + esc(patientName) + '<br />' +
+          '<strong>URL:</strong> ' + esc(url);
 
-function nextLightboxImg() {
-  currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
-  showLightboxImage();
-}
-window.nextLightboxImg = nextLightboxImg;
+        openModal('qrModal');
 
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-}
-window.closeLightbox = closeLightbox;
+        var apiURL = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&color=1a3a5c&bgcolor=ffffff&data=' + encodeURIComponent(url);
 
-function downloadLightboxImg() {
-  const img = currentLightboxImages[currentLightboxIndex];
-  if (!img) return;
-  const link = document.createElement('a');
-  link.href = img.data;
-  link.download = img.filename;
-  link.click();
-}
-window.downloadLightboxImg = downloadLightboxImg;
+        var img = $('qrImage');
+        img.onload = function () {
+          $('qrLoading').style.display = 'none';
+          img.style.display = 'block';
+          $('downloadQRBtn').style.display = 'inline-flex';
+        };
+        img.onerror = function () {
+          tryGenerateQRCanvas(url);
+        };
+        img.src = apiURL;
+      }
 
-function deleteLightboxImg() {
-  const img = currentLightboxImages[currentLightboxIndex];
-  if (!img) return;
-  if (!confirm('Delete this image?')) return;
-  deleteDoc(doc(db, 'patients', currentPatient.id, 'files', img.id)).then(() => {
-    showToast('Image deleted.', 'green');
-    closeLightbox();
-    loadPatientFiles(currentPatient.id);
-  });
-}
-window.deleteLightboxImg = deleteLightboxImg;
+      function tryGenerateQRCanvas(url) {
+        var canvas = document.createElement('canvas');
+        canvas.width = 300;
+        canvas.height = 300;
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 300, 300);
+        ctx.strokeStyle = '#1a3a5c';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(10, 10, 280, 280);
+        ctx.fillStyle = '#1a3a5c';
+        ctx.font = 'bold 14px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('QR Code', 150, 80);
+        ctx.font = '11px Inter, sans-serif';
+        ctx.fillStyle = '#8e99aa';
+        ctx.fillText('Copy the URL below', 150, 120);
+        var img = $('qrImage');
+        img.src = canvas.toDataURL();
+        $('qrLoading').style.display = 'none';
+        img.style.display = 'block';
+      }
 
-// ——— ALL FILES PAGE ———
-async function loadAllFiles() {
-  const container = document.getElementById('allFilesGrid');
-  container.innerHTML = `<div class="skeleton" style="height:200px;grid-column:1/-1;"></div>`;
-  const allFiles = [];
-  for (const p of patients) {
-    try {
-      const snapshot = await getDocs(query(collection(db, 'patients', p.id, 'files'), orderBy('uploaded_at', 'desc')));
-      snapshot.docs.forEach(d => {
-        allFiles.push({ id: d.id, patientId: p.id, patientName: `${p.first_name || ''} ${p.last_name || ''}`.trim(), ...d.data() });
+      $('copyLinkBtn').addEventListener('click', function () {
+        if (!currentQR.url) { toast('No URL to copy.', 'error'); return; }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(currentQR.url).then(function () {
+            toast('Link copied to clipboard!');
+          }).catch(function () {
+            fallbackCopy(currentQR.url);
+          });
+        } else {
+          fallbackCopy(currentQR.url);
+        }
       });
-    } catch (err) { /* skip */ }
-  }
-  window._allFiles = allFiles;
-  renderAllFiles();
-}
-window.loadAllFiles = loadAllFiles;
 
-function renderAllFiles() {
-  const container = document.getElementById('allFilesGrid');
-  const search = document.getElementById('searchFiles').value.toLowerCase();
-  const typeFilter = document.getElementById('filterFileType').value;
+      $('downloadQRBtn').addEventListener('click', function () {
+        var img = $('qrImage');
+        if (!img.src) { toast('QR not ready.', 'error'); return; }
+        var link = document.createElement('a');
+        link.download = 'qr-' + currentQR.name.replace(/\s+/g, '-').toLowerCase() + '.png';
+        link.href = img.src;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast('QR code downloaded!');
+      });
 
-  let files = window._allFiles || [];
-  files = files.filter(f => {
-    const matchSearch = f.filename.toLowerCase().includes(search) || f.patientName.toLowerCase().includes(search);
-    let matchType = true;
-    if (typeFilter === 'image') matchType = isImage(f.filename);
-    else if (typeFilter === 'pdf') matchType = f.filename.toLowerCase().endsWith('.pdf');
-    else if (typeFilter === 'doc') matchType = ['doc', 'docx'].includes(f.filename.split('.').pop().toLowerCase());
-    return matchSearch && matchType;
-  });
+      // ================================================
+      //  ADD PATIENT
+      // ================================================
+      $('addPatientBtn').addEventListener('click', function () {
+        $('addPatientForm').reset();
+        $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
+        $('errId').style.display = 'none';
+        $('newAvatarPreview').style.display = 'none';
+        openModal('addPatientModal');
+      });
 
-  if (files.length === 0) {
-    container.innerHTML = `<div class="empty" style="grid-column:1/-1;"><i class="fas fa-folder-open"></i><p>No files found</p></div>`;
-    return;
-  }
+      var avatarData = '';
 
-  container.innerHTML = files.map(f => {
-    const tag = getFileTag(f.filename);
-    const typeClass = getFileTypeClass(f.filename);
-    if (isImage(f.filename)) {
-      return `<div class="file-card">
-        <img src="${f.data}" />
-        <div class="file-info">
-          <div class="fname">${f.filename}</div>
-          <div class="fdate"><i class="fas fa-user"></i> ${f.patientName}</div>
-          <div class="fdate"><i class="fas fa-calendar"></i> ${formatDateTime(f.uploaded_at)}</div>
-          <div class="file-tag ${tag.class}">${tag.text}</div>
-        </div>
-      </div>`;
-    }
-    return `<div class="file-card">
-      <div class="fi ${typeClass}"><i class="fas fa-file-alt"></i></div>
-      <div class="file-info">
-        <div class="fname">${f.filename}</div>
-        <div class="fdate"><i class="fas fa-user"></i> ${f.patientName}</div>
-        <div class="fdate"><i class="fas fa-calendar"></i> ${formatDateTime(f.uploaded_at)}</div>
-        <div class="file-tag ${tag.class}">${tag.text}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-window.renderAllFiles = renderAllFiles;
+      $('newAvatarFile').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) { avatarData = ''; $('newAvatarPreview').style.display = 'none'; return; }
 
-// ——— QR CODES ———
-function generateAllQR() {
-  const grid = document.getElementById('qrGrid');
-  if (patients.length === 0) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;"><i class="fas fa-qrcode"></i><p>No patients to generate QR codes for</p></div>`;
-    return;
-  }
-  grid.innerHTML = patients.map(p => {
-    const name = `${p.first_name || ''} ${p.last_name || ''}`.trim();
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('patient:' + p.id)}`;
-    return `<div class="qr-card">
-      <img src="${qrUrl}" alt="QR" />
-      <div class="nm">${name}</div>
-      <div class="id">${p.patient_id || p.id}</div>
-      <button class="btn btn-primary btn-sm" onclick="printQR('${p.id}')"><i class="fas fa-print"></i> Print</button>
-    </div>`;
-  }).join('');
-}
-window.generateAllQR = generateAllQR;
+        if (file.size > 5 * 1024 * 1024) {
+          toast('Photo must be under 5 MB.', 'error');
+          e.target.value = '';
+          return;
+        }
 
-function printQR(patientId) {
-  const p = patients.find(x => x.id === patientId);
-  if (!p) return;
-  const name = `${p.first_name || ''} ${p.middle_name || ''} ${p.last_name || ''}`.trim();
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent('patient:' + p.id)}`;
-  const win = window.open('', '_blank');
-  win.document.write(`
-    <html><head><title>QR - ${name}</title>
-    <style>body{font-family:Arial;text-align:center;padding:40px;}img{width:250px;height:250px;}h2{margin:16px 0 4px;}p{color:#555;font-size:14px;}</style>
-    </head><body>
-    <h1 style="color:#0f2b5b;">NEW ERA PEDIATRIC</h1>
-    <img src="${qrUrl}" />
-    <h2>${name}</h2>
-    <p>Patient ID: ${p.patient_id || p.id}</p>
-    </body></html>`);
-  win.document.close();
-  setTimeout(() => win.print(), 500);
-}
-window.printQR = printQR;
+        var img = new Image();
+        img.onload = function () {
+          var canvas = document.createElement('canvas');
+          var MAX = 300;
+          var w = img.width;
+          var h = img.height;
+          if (w > h) {
+            if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+          } else {
+            if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          avatarData = canvas.toDataURL('image/jpeg', 0.8);
+          $('newAvatarImg').src = avatarData;
+          $('newAvatarPreview').style.display = 'block';
+        };
+        img.src = URL.createObjectURL(file);
+        e.target.value = '';
+      });
 
-function printAllQR() {
-  const win = window.open('', '_blank');
-  let html = `<html><head><title>All QR Codes</title>
-  <style>body{font-family:Arial;padding:20px;display:flex;flex-wrap:wrap;gap:20px;justify-content:center;}
-  .qr-item{text-align:center;width:180px;page-break-inside:avoid;}img{width:140px;height:140px;}</style>
-  </head><body><h1 style="width:100%;text-align:center;color:#0f2b5b;">NEW ERA PEDIATRIC – Patient QR Codes</h1>`;
-  patients.forEach(p => {
-    const name = `${p.first_name || ''} ${p.last_name || ''}`.trim();
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('patient:' + p.id)}`;
-    html += `<div class="qr-item"><img src="${qrUrl}" /><h3 style="font-size:13px;">${name}</h3><p style="font-size:11px;color:#666;">${p.patient_id || p.id}</p></div>`;
-  });
-  html += `</body></html>`;
-  win.document.write(html);
-  win.document.close();
-  setTimeout(() => win.print(), 800);
-}
-window.printAllQR = printAllQR;
+      $('saveNewPatientBtn').addEventListener('click', async function () {
+        $qa('#addPatientForm .form-group').forEach(function (g) { g.classList.remove('has-error'); });
+        $('errId').style.display = 'none';
 
-// ——— SCANNER ———
-let html5QrCode = null;
-let scanning = false;
+        var newId = $('newPatientId').value.trim();
+        var name = $('newName').value.trim();
+        var age = $('newAge').value.trim();
+        var gender = $('newGender').value;
+        var birthday = $('newBirthday').value;
+        var guardian = $('newGuardian').value.trim();
+        var contact = $('newContact').value.trim();
+        var address = $('newAddress').value.trim();
 
-function openScannerPage() {
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const scannerNav = document.querySelector('[data-page="scanner"]');
-  if (scannerNav) scannerNav.classList.add('active');
-  document.querySelectorAll('[id^="page-"]').forEach(p => p.style.display = 'none');
-  document.getElementById('page-scanner').style.display = 'block';
-}
-window.openScannerPage = openScannerPage;
+        var valid = true;
 
-async function startQRScan() {
-  if (scanning) return;
-  try {
-    html5QrCode = new Html5Qrcode('qr-reader');
-    scanning = true;
-    document.getElementById('btnStartScan').style.display = 'none';
-    document.getElementById('btnStopScan').style.display = 'inline-flex';
+        if (!newId) {
+          $('newPatientId').closest('.form-group').classList.add('has-error');
+          $('errId').style.display = 'block';
+          $('errId').textContent = 'Patient ID is required.';
+          valid = false;
+        } else if (!/^[a-zA-Z0-9\-]+$/.test(newId)) {
+          $('newPatientId').closest('.form-group').classList.add('has-error');
+          $('errId').style.display = 'block';
+          $('errId').textContent = 'Use only letters, numbers, and dashes.';
+          valid = false;
+        } else if (firebasePatients.some(function (p) { return p.id === newId; })) {
+          $('newPatientId').closest('.form-group').classList.add('has-error');
+          $('errId').style.display = 'block';
+          $('errId').textContent = 'This Patient ID already exists!';
+          valid = false;
+        }
 
-    await html5QrCode.start(
-      { facingMode: 'environment' },
-      { fps: 10, qrbox: { width: 250, height: 250 } },
-      onScanSuccess,
-      onScanError
-    );
-  } catch (err) {
-    showToast('Camera access denied or not available.', 'red');
-    scanning = false;
-    document.getElementById('btnStartScan').style.display = 'inline-flex';
-    document.getElementById('btnStopScan').style.display = 'none';
-  }
-}
-window.startQRScan = startQRScan;
+        var checks = [
+          { el: $('newName'), val: name }, { el: $('newAge'), val: age },
+          { el: $('newGender'), val: gender }, { el: $('newBirthday'), val: birthday },
+          { el: $('newGuardian'), val: guardian }, { el: $('newContact'), val: contact },
+          { el: $('newAddress'), val: address }
+        ];
+        checks.forEach(function (c) {
+          if (!c.val) { c.el.closest('.form-group').classList.add('has-error'); valid = false; }
+        });
 
-async function stopQRScan() {
-  if (html5QrCode && scanning) {
-    await html5QrCode.stop();
-    html5QrCode.clear();
-    scanning = false;
-    document.getElementById('btnStartScan').style.display = 'inline-flex';
-    document.getElementById('btnStopScan').style.display = 'none';
-  }
-}
-window.stopQRScan = stopQRScan;
+        if (!valid) { toast('Please fill in all required fields.', 'error'); return; }
 
-function onScanSuccess(decodedText) {
-  stopQRScan();
-  const patientId = decodedText.replace('patient:', '');
-  const p = patients.find(x => x.id === patientId);
-  document.getElementById('scanResult').style.display = 'block';
-  if (p) {
-    const name = `${p.first_name || ''} ${p.last_name || ''}`.trim();
-    document.getElementById('scanResultText').innerHTML = `<strong>${name}</strong> (${p.patient_id || p.id}) found!`;
-    document.getElementById('btnOpenPatient').style.display = 'inline-flex';
-    document.getElementById('btnOpenPatient').onclick = () => viewPatient(patientId);
-  } else {
-    document.getElementById('scanResultText').textContent = 'Patient ID: ' + patientId + ' — not found in records.';
-    document.getElementById('btnOpenPatient').style.display = 'none';
-  }
-  showToast('QR Code scanned!', 'green');
-}
+        var saveBtn = this;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-function onScanError() { /* silent */ }
+        var patientData = {
+          id: newId, name: name, age: age, gender: gender,
+          birthday: birthday, guardian: guardian, contact: contact,
+          address: address, avatar: avatarData || ''
+        };
 
-// ——— EXPORT ———
-function exportData() {
-  const data = JSON.stringify(patients, null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'nep_patients_' + new Date().toISOString().split('T')[0] + '.json';
-  link.click();
-  URL.revokeObjectURL(url);
-  showToast('Data exported!', 'green');
-}
-window.exportData = exportData;
+        await firebaseAddPatient(patientData);
 
-// ——— PRINT PATIENT PDF ———
-function printPatientPDF() {
-  if (!currentPatient) return;
-  const p = currentPatient;
-  const name = `${p.first_name || ''} ${p.middle_name || ''} ${p.last_name || ''}`.trim();
-  const age = p.birth_date ? calcAge(p.birth_date) : '—';
-  const win = window.open('', '_blank');
-  win.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Patient Record – ${name}</title>
-      <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:Arial,sans-serif;padding:30px;color:#333;}
-        .header{text-align:center;margin-bottom:24px;border-bottom:3px solid #0f2b5b;padding-bottom:16px;}
-        .header img{width:80px;height:80px;border-radius:12px;object-fit:cover;}
-        .header h1{color:#0f2b5b;font-size:22px;margin:10px 0 4px;}
-        .header p{color:#666;font-size:12px;}
-        .section{margin-bottom:20px;}
-        .section h2{font-size:14px;color:#0f2b5b;border-bottom:1px solid #ddd;padding-bottom:6px;margin-bottom:10px;text-transform:uppercase;}
-        .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-        .info-item{font-size:13px;}
-        .info-item strong{color:#333;}
-        .record{background:#f8f9fa;border:1px solid #eee;border-radius:8px;padding:12px;margin-bottom:10px;}
-        .record h3{font-size:13px;color:#0f2b5b;}
-        .record p{font-size:12px;color:#555;margin-top:4px;}
-        .footer{margin-top:30px;text-align:center;font-size:11px;color:#999;border-top:1px solid #ddd;padding-top:12px;}
-        @media print{body{padding:15px;}}
-      </style>
-    </head>
-    <body>
-      <div class="header">
-        <img src="logo.png" alt="Logo" />
-        <h1>NEW ERA PEDIATRIC</h1>
-        <p>Patient Medical Record</p>
-        <p>Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-      </div>
-      <div class="section">
-        <h2>Patient Information</h2>
-        <div class="info-grid">
-          <div class="info-item"><strong>Patient ID:</strong> ${p.patient_id || p.id}</div>
-          <div class="info-item"><strong>Full Name:</strong> ${name}</div>
-          <div class="info-item"><strong>Birth Date:</strong> ${formatDate(p.birth_date)}</div>
-          <div class="info-item"><strong>Age:</strong> ${age}</div>
-          <div class="info-item"><strong>Sex:</strong> ${p.sex || '—'}</div>
-          <div class="info-item"><strong>Weight:</strong> ${p.weight || '—'} kg</div>
-          <div class="info-item"><strong>Height:</strong> ${p.height || '—'} cm</div>
-          <div class="info-item"><strong>Guardian:</strong> ${p.guardian_name || '—'}</div>
-          <div class="info-item"><strong>Contact:</strong> ${p.contact_number || '—'}</div>
-          <div class="info-item"><strong>Address:</strong> ${p.address || '—'}</div>
-        </div>
-      </div>
-      <div class="section">
-        <h2>Medical History</h2>
-        <p style="font-size:13px;">${p.medical_history || 'No medical history recorded.'}</p>
-      </div>
-      <div class="section">
-        <h2>Vitals</h2>
-        <div class="info-grid">
-          <div class="info-item"><strong>Temperature:</strong> ${p.temperature || '—'} °C</div>
-          <div class="info-item"><strong>Heart Rate:</strong> ${p.heart_rate || '—'} bpm</div>
-          <div class="info-item"><strong>Blood Pressure:</strong> ${p.blood_pressure || '—'}</div>
-          <div class="info-item"><strong>O2 Saturation:</strong> ${p.oxygen_saturation || '—'}%</div>
-        </div>
-      </div>
-      <div class="footer">
-        <p><strong>NEW ERA PEDIATRIC</strong></p>
-        <p>© 2026 NEW ERA PEDIATRIC. All rights reserved.</p>
-      </div>
-    </body>
-    </html>
-  `);
-  win.document.close();
-  setTimeout(() => win.print(), 600);
-}
-window.printPatientPDF = printPatientPDF;
+        try {
+          localStorage.setItem('nep_patient_' + newId, JSON.stringify(patientData));
+          localStorage.setItem('nep_records_' + newId, JSON.stringify([]));
+          localStorage.setItem('nep_files_' + newId, JSON.stringify([]));
+        } catch (e) {}
 
-// ——— SETTINGS ———
-function saveSettings() {
-  const settings = {
-    clinic_name: document.getElementById('setClinicName').value,
-    copyright: document.getElementById('setCopyright').value,
-    contact: document.getElementById('setContact').value,
-    address: document.getElementById('setAddress').value,
-    auto_delete_days: document.getElementById('setAutoDelete').value
-  };
-  localStorage.setItem('nep_settings', JSON.stringify(settings));
-  showToast('Settings saved!', 'green');
-}
-window.saveSettings = saveSettings;
+        avatarData = '';
+        renderPatientList();
+        closeModal('addPatientModal');
+        toast('Patient "' + name + '" added and synced!');
 
-function loadSettings() {
-  const s = localStorage.getItem('nep_settings');
-  if (s) {
-    const settings = JSON.parse(s);
-    document.getElementById('setClinicName').value = settings.clinic_name || 'NEW ERA PEDIATRIC';
-    document.getElementById('setCopyright').value = settings.copyright || '© 2026 NEW ERA PEDIATRIC. All rights reserved.';
-    document.getElementById('setContact').value = settings.contact || '';
-    document.getElementById('setAddress').value = settings.address || '';
-    document.getElementById('setAutoDelete').value = settings.auto_delete_days || '0';
-  }
-}
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Patient';
+      });
 
-window.addEventListener('DOMContentLoaded', loadSettings);
-</script>
+      // ================================================
+      //  DELETE PATIENT
+      // ================================================
+      var pendingDeleteId = '';
+
+      function confirmDelete(patientId, patientName) {
+        pendingDeleteId = patientId;
+        $('deletePatientMsg').innerHTML =
+          'Delete <strong>' + esc(patientName) + '</strong> permanently?<br /><br />' +
+          'All records and files will be removed. <strong>Cannot be undone.</strong>';
+        openModal('deletePatientModal');
+      }
+
+      $('confirmDeletePatientBtn').addEventListener('click', async function () {
+        if (!pendingDeleteId) return;
+
+        var deleteBtn = this;
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+        await firebaseDeletePatient(pendingDeleteId);
+
+        try {
+          localStorage.removeItem('nep_patient_' + pendingDeleteId);
+          localStorage.removeItem('nep_records_' + pendingDeleteId);
+          localStorage.removeItem('nep_files_' + pendingDeleteId);
+        } catch (e) {}
+
+        renderPatientList();
+        closeModal('deletePatientModal');
+        toast('Patient deleted.', 'info');
+        pendingDeleteId = '';
+
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete Permanently';
+      });
+
+      // ================================================
+      //  CLEAR ERRORS ON TYPING
+      // ================================================
+      document.addEventListener('input', function (e) {
+        var group = e.target.closest('.form-group.has-error');
+        if (group) {
+          group.classList.remove('has-error');
+          var err = group.querySelector('.err');
+          if (err) err.style.display = 'none';
+        }
+      });
+
+      // ================================================
+      //  INIT
+      // ================================================
+      renderPatientList();
+      startFirebaseListeners();
+
+      console.log('%c ADMIN %c Firebase Sync: ON', 'background:#1a3a5c;color:#fff;padding:4px 10px;border-radius:4px 0 0 4px;font-weight:700;', 'background:#ea4335;color:#fff;padding:4px 10px;border-radius:0 4px 4px 0;');
+
+    })();
+
+    // Auto-refresh when returning to this page (fallback)
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) location.reload();
+    });
+  </script>
+
+  <!-- QR Scanner (loaded AFTER the module script, outside of it) -->
+  <script src="qr-scanner.js" defer></script>
 
 </body>
 </html>
