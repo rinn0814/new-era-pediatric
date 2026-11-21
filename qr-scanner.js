@@ -70,8 +70,9 @@
     style.textContent = CSS;
     document.head.appendChild(style);
 
-        document.body.insertAdjacentHTML('beforeend',
+    document.body.insertAdjacentHTML('beforeend',
       '<div class="nep-fabs">' +
+        '<button type="button" class="nep-fab alt" id="nepQrBtn"><i class="fas fa-qrcode"></i> Patient QR</button>' +
         '<button type="button" class="nep-fab" id="nepScanBtn"><i class="fas fa-camera"></i> Scan QR</button>' +
       '</div>' +
 
@@ -120,6 +121,7 @@
   // ================================================
   function wireEvents() {
     document.getElementById('nepScanBtn').addEventListener('click', openScanner);
+    document.getElementById('nepQrBtn').addEventListener('click', function () { openQrManager(); });
     document.getElementById('nepQrPrint').addEventListener('click', printQr);
     document.getElementById('nepQrFile').addEventListener('change', onQrPhotoChosen);
     document.getElementById('nepQrSelect').addEventListener('change', function (e) {
@@ -432,10 +434,6 @@
   }
 
   // ================================================
-  //  AUTO-ADD MINI QR BUTTONS TO PATIENT LINKS
-  // ================================================
-
-  // ================================================
   //  PUBLIC API
   // ================================================
   window.NEP_showPatientQR = function (id) { openQrManager(id); };
@@ -447,7 +445,6 @@
     if (!isAdminPage()) return;
     buildUI();
     wireEvents();
-   // autoAddQrButtons removed
   }
 
   if (document.readyState === 'loading') {
